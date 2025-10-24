@@ -2,23 +2,11 @@ import pandas as pd
 import numpy as np
 import ollama
 import re
-
+import os
+from src.io import read_tabular
 from pathlib import Path
 
-def read_tabular(path: str, columns: Optional[List[str]]=None, **kwargs) -> 'pd.DataFrame':
-    if not _is_file(str(path)):
-        raise FileNotFoundError(f'File not found: {path}')
-
-    sep = _get_col_separator(str(path))
-    if sep is None:
-        raise ValueError(f'Unsupported file format. `path` Must be a .tsv, .tab, or .csv file.')
-
-    df = pd.read_csv(path, sep=sep, **kwargs)
-    if columns is not None:
-        for c in columns:
-            assert c in df.columns, f'Column {c} not found in the dataframe.'
-        df = df[columns]
-    return df
+os.makedirs("output", exist_ok=True)
 
 def classify_text(text, system_message, model):
 
@@ -46,7 +34,6 @@ def classify_text(text, system_message, model):
     options=opts
   )
   
-  # NOTE: this changed slightly compared to using `openai` Client
   result = response.message.content.strip()
   
   return result
@@ -54,7 +41,8 @@ def classify_text(text, system_message, model):
 MISTRAL = 'mistral-small3.2:24b'
 ollama.pull(MISTRAL)
 
-fp = Path("../data")
+script_dir = Path(__file__).parent
+fp = script_dir.parent / 'data'
 df = read_tabular(fp / 'sz_test.csv')
 txt = df['text']
 
@@ -84,5 +72,8 @@ MODEL = "mistral-small3.2:24b"
 
 classifications = [
     classify_text(text, instruction, MISTRAL)
-    for text in txt
+    for text in txt[0:2]
 ]
+
+class_df = pd.DataFrame({'text': txt[0:2], 'coresent': classifications})
+class_df.to_csv("output/test.csv")
