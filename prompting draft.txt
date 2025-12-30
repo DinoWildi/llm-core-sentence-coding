@@ -1,0 +1,49 @@
+BASELINE: instructions to humans
+
+Explanation: This is a set of instructions strongly based on the codebook supplied to human coders. It has been adapted in the following ways:
+
+a) re-phrased instructions to remove potential unclear word use; in particular, we attempted to avoid using the same word for multiple concepts (e.g. consistently differentiating "actor", "core sentence subject", and "grammatical subject").
+b) Re-ordering information that appears in different parts of the codebook.
+c) Adding supplemental information that was given to human coders in verbal form at training sessions, but is not directly represented in the codebook.
+d) Add technical information regarding the input and output format.
+
+Prompt:
+You will be given a sentence taken from an article published in [newspaper]. Your task is to extract so-called "core sentences" from the excerpt according to the following instructions. 
+
+## Definition of a core sentence
+
+The core sentence approach is interested in the relationships expressed in a grammatical sentence. According to this procedure, each grammatical sentence is reduced to its most basic structure, the so called 'core sentence'. A core sentence consists of three elements: a 'Subject' (a political actor), an 'Object' (another actor or a political issue), and a 'Direction' indicating a positive or negative relationship between the two.
+
+Core sentences do not correspond directly to grammatical sentences. A grammatical sentence can include zero, one, or multiple core sentences. Furthermoer, a core sentence subject may be different from the grammatical subject of a sentence: In the sentence "The plan was endorsed by the minister", the grammatical subject is "the plan", but the core sentence subject is "the minister".
+
+## Definitions of elements
+
+### Subject
+The subject of a core sentence is an actor expressing a position towards the object. Subjects can include representatives of political parties, movements, unions, business interests, state institutions, and similar groups. 
+
+### Object
+The object of a core sentence is an actor or an issue that the object is taking a position towards. Objects can be representatives of political parties, movements, unions, business interests, state institutions, and similar groups. Objects can also be issues that the subject is taking a stance towards, such as policies, state actions, public actions like protests, or developments like climate change.
+
+### Direction
+Indicates the stance of the subject toward the object of the sentence. Use
+the following coding:
+• -1 = Opposition
+• 0 = Ambivalent
+• +1 = Support
+
+## Output format
+
+Your output should take the following form:
+[Subject] / [Direction] / [Object]. 
+
+If multiple core sentences are present in the grammatical sentence, separate them by semicolons: [Subject 1] / [Direction 1] / [Object 1]; [Subject 2] / [Direction 2] / [Object 2].
+
+If no core sentences are present, return "No core sentence found".
+
+Do not return anything else.
+
+## Examples
+
+Sentence: "The Dutch Prime Minister condemned the actions of Extinction Rebellion" => "Dutch Prime Minister / -1 / Extinction Rebellion"
+Sentence: "The German Greens support phasing out coal by 2030" => "German Greens / +1 / coal phase-out"
+Sentence: "The German Chancellor Olaf Scholz and French President Macron agreed on a new joint climate investment fund in the EU" => "Olaf Scholz / +1 / Emmanuel Macron; Emmanuel Macron / +1 / Olaf Scholz; Olaf Scholz / +1 / joint climate investment; Emmanuel Macron / +1 / join climate investment"

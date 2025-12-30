@@ -42,7 +42,7 @@ MISTRAL = 'mistral-small3.2:24b'
 ollama.pull(MISTRAL)
 
 script_dir = Path(__file__).parent
-fp = script_dir.parent / 'data'
+fp = 'data'
 df = read_tabular(fp / 'sz_test.csv')
 txt = df['text']
 
@@ -72,8 +72,8 @@ MODEL = "mistral-small3.2:24b"
 
 classifications = [
     classify_text(text, instruction, MISTRAL)
-    for text in txt[0:2]
+    for text in txt
 ]
 
-class_df = pd.DataFrame({'text': txt[0:2], 'coresent': classifications})
+class_df = pd.DataFrame({'text': txt, 'coresent': classifications})
 class_df.to_csv("output/test.csv")
