@@ -1,9 +1,16 @@
 # To be created
 
-## Status 2025-10-21
-* created basic structure
+## Status 2026-04-24
 
-## Next steps
-* upload some mini dataset
-* make script for local ollama testing
-* make test script for hpc
+### Code
+- Pipeline exists but is not robust
+  - Bugfixing: expand to other models than GPT-OSS reliably (unclear what is Ollama/HPC and what is my own code)
+- Validation scripts are flimsy and need improvement
+
+### Data
+Established validation dataset.
+
+## To be done
+
+- Extend pipeline to other models
+- Group pipeline and/or Slurm scripts to reduce load of cluster calls
