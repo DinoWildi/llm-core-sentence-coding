@@ -1,0 +1,18 @@
+[
+  {
+    "sentence": "They are still paying to generate electricity based on the price of gas while at the same time paying billions of pounds through their bills to fund the investment needed to build and distribute the new clean power.",
+    "type": "actor-actor",
+    "subject": "",
+    "direction": "opposition",
+    "object": "",
+    "reference": ""
+  },
+  {
+    "sentence": "In a statement released last night, an MoJ spokersperson said: The crisis in the prison system this government inherited is such that basic information about individual cases can take unacceptably long to reach ministers.",
+    "type": "actor-actor",
+    "subject": "Ministry of Justice",
+    "direction": "ambivalent",
+    "object": "Labour Party",
+    "reference": "investing in green energy"
+  }
+]

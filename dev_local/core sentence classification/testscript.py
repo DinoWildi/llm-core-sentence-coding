@@ -41,9 +41,7 @@ def classify_text(text, system_message, model):
 MISTRAL = 'mistral-small3.2:24b'
 ollama.pull(MISTRAL)
 
-script_dir = Path(__file__).parent
-fp = 'data'
-df = read_tabular(fp / 'sz_test.csv')
+df = read_tabular(Path("../data/sz_test.csv"))
 txt = df['text']
 
 instruction = f"""

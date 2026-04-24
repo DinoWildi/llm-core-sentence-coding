@@ -1,0 +1,18 @@
+[
+  {
+    "sentence": "The move will mean restricting heat-pump subsidies so that only those receiving certain benefits will be allowed to claim them, sharply bringing down costs to the government.",
+    "type": "actor-actor",
+    "subject": "the government",
+    "direction": "opposition",
+    "object": "heat-pump subsidies",
+    "reference": ""
+  },
+  {
+    "sentence": "Education, health and care plans (EHCPs), at the centre of the government’s likely plans to reform Send provision , cost £1,000 more on average than the funding provided to meet the needs described.",
+    "type": "actor-actor",
+    "subject": "Education, health and care plans (EHCPs)",
+    "direction": "ambivalent",
+    "object": "the funding provided to meet the needs described",
+    "reference": ""
+  }
+]

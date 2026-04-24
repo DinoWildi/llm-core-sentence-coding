@@ -1,0 +1,1151 @@
+[
+  {
+    "sentence": "Energy industry experts, however, warn that by taking the support away ministers will slow the transition from gas boilers to more expensive but cleaner heat pumps.",
+    "core_sents": [
+      {
+        "type": "actor_issue",
+        "subject": "Energy industry experts",
+        "direction": "opposition",
+        "object": null,
+        "issue": "transition from gas boilers to more expensive but cleaner heat pumps"
+      }
+    ]
+  },
+  {
+    "sentence": "Well-insulated homes are cheap to run – in the best, heating bills are minimal – and pleasant to live in, especially for older people, children and those with health problems, but installing insulation is easy to get wrong.",
+    "core_sents": [
+      {
+        "type": "NA",
+        "subject": "",
+        "direction": "NA",
+        "object": null,
+        "issue": null
+      }
+    ]
+  },
+  {
+    "sentence": "Related: Prospect of breaking 50-year income tax taboo shows scale of Reeves’s challenge",
+    "core_sents": null
+  },
+  {
+    "sentence": "Even if everything is exploding around him, he has a plan and knows the direction we’re going in,” they added.",
+    "core_sents": [
+      {
+        "type": "actor-actor",
+        "subject": "UK Government",
+        "direction": "support",
+        "object": "Prime Minister Rishi Sunak",
+        "issue": null
+      }
+    ]
+  },
+  {
+    "sentence": "Miliband spoke as world leaders have been meeting in Belém, Brazil, before the crucial Cop30 conference begins on Monday, at which governments of every stripe will attempt to forge a pathway that limits global temperatures and avoids the ravages of climate breakdown.",
+    "core_sents": [
+      {
+        "type": "NA",
+        "subject": "Miliband",
+        "direction": "NA",
+        "object": null,
+        "issue": null
+      }
+    ]
+  },
+  {
+    "sentence": "This week, the government set out its long-awaited “warm homes plan” , a £15bn investment to help reduce bills and increase clean energy",
+    "core_sents": [
+      {
+        "type": "actor_issue",
+        "subject": "UK Government",
+        "direction": "support",
+        "object": null,
+        "issue": "reduce bills and increase clean energy"
+      }
+    ]
+  },
+  {
+    "sentence": "Labour's biggest green donor has described a government push for \"zerobill homes\" a \"silly concept\" and called for poorer households to be singled out for support.",
+    "core_sents": [
+      {
+        "type": "actor_issue",
+        "subject": "Labour Party",
+        "direction": "opposition",
+        "object": null,
+        "issue": "government push for zerobill homes"
+      },
+      {
+        "type": "actor_issue",
+        "subject": "Labour Party",
+        "direction": "support",
+        "object": null,
+        "issue": "targeted support for poorer households"
+      }
+    ]
+  },
+  {
+    "sentence": "Among those measures, according to sources briefed on the budget preparations, is a plan to take energy efficiency levies off bills and fund them through the government’s existing warm homes plan.",
+    "core_sents": [
+      {
+        "type": "actor_issue",
+        "subject": "UK Government",
+        "direction": "support",
+        "object": null,
+        "issue": "take energy efficiency levies off bills"
+      }
+    ]
+  },
+  {
+    "sentence": "However, there have been concerns about the increased risk of fires from the appliances",
+    "core_sents": [
+      {
+        "type": "NA",
+        "subject": "",
+        "direction": "NA",
+        "object": null,
+        "issue": null
+      }
+    ]
+  },
+  {
+    "sentence": "Reeves is finalising a multibillion pound energy support package that is likely to cut taxes and green levies from people’s bills as she looks to save as much as £170 from the average bill.",
+    "core_sents": [
+      {
+        "type": "actor_issue",
+        "subject": "Labour Party",
+        "direction": "support",
+        "object": null,
+        "issue": "cut taxes and green levies from people’s bills"
+      }
+    ]
+  },
+  {
+    "sentence": "Miliband’s words also seemed aimed at some within his own party, who have sought in backroom briefings to play down the UK’s climate policies for fear of having them targeted by Reform",
+    "core_sents": [
+      {
+        "type": "actor-actor",
+        "subject": "Labour Party",
+        "direction": "opposition",
+        "object": "Labour Party",
+        "issue": "UK’s climate policies"
+      }
+    ]
+  },
+  {
+    "sentence": "It would leave Britain vulnerable to the whims of fossil fuel despots, put thousands of jobs at risk and blow a hole clean through the UK’s plans for climate action.",
+    "core_sents": [
+      {
+        "type": "actor_issue",
+        "subject": "UK Government",
+        "direction": "opposition",
+        "object": null,
+        "issue": "UK’s plans for climate action"
+      }
+    ]
+  },
+  {
+    "sentence": "Rachel Reeves, the chancellor, is planning to announce a series of measures to bring down energy bills amid concerns the country’s stubbornly high cost of living is driving millions of voters to Reform UK.",
+    "core_sents": [
+      {
+        "type": "actor_issue",
+        "subject": "Labour Party",
+        "direction": "support",
+        "object": null,
+        "issue": "bringing down energy bills"
+      }
+    ]
+  },
+  {
+    "sentence": "Another piece of the jigsaw is pure hydrogen pipelines, ensuring that production plants aren't reliant on customers next door and can supply a network of businesses",
+    "core_sents": null
+  },
+  {
+    "sentence": "The projects falling away right now aren't really that big a concern.",
+    "core_sents": [
+      {
+        "type": "NA",
+        "subject": "",
+        "direction": "NA",
+        "object": null,
+        "issue": null
+      }
+    ]
+  },
+  {
+    "sentence": "These are the people that can least afford solar panels, probably.",
+    "core_sents": [
+      {
+        "type": "actor_issue",
+        "subject": "people that can least afford solar panels",
+        "direction": "ambivalent",
+        "object": null,
+        "issue": "least afford solar panels"
+      }
+    ]
+  },
+  {
+    "sentence": "Hydrogen is seen as a superfuel because it doesn't give off harmful emissions when burnt",
+    "core_sents": null
+  },
+  {
+    "sentence": "He said the world should not give up on limiting global heating to the crucial 1.5C threshold, as we could be on the verge of a rapid global shift to clean energy that will defy predictions of doom.",
+    "core_sents": [
+      {
+        "type": "actor_issue",
+        "subject": "Labour Party",
+        "direction": "support",
+        "object": null,
+        "issue": "limiting global heating to the crucial 1.5C threshold"
+      }
+    ]
+  },
+  {
+    "sentence": "But the Institute for Fiscal Studies has pointed out that these savings will be quickly eroded by other rising energy costs.",
+    "core_sents": [
+      {
+        "type": "actor_issue",
+        "subject": "Institute for Fiscal Studies",
+        "direction": "opposition",
+        "object": null,
+        "issue": "rising energy costs"
+      }
+    ]
+  },
+  {
+    "sentence": "The chancellor is hoping her focus on reducing energy bills will help bolster Labour’s slump in the polls, dent the appeal of Reform UK and mitigate the impact of widely expected tax rises in the autumn budget.",
+    "core_sents": [
+      {
+        "type": "actor-actor",
+        "subject": "Labour Party",
+        "direction": "opposition",
+        "object": "Labour Party",
+        "issue": "reducing energy bills"
+      },
+      {
+        "type": "actor-actor",
+        "subject": "Labour Party",
+        "direction": "opposition",
+        "object": "Reform UK",
+        "issue": "reducing energy bills"
+      },
+      {
+        "type": "actor_issue",
+        "subject": "Labour Party",
+        "direction": "support",
+        "object": null,
+        "issue": "tax rises"
+      }
+    ]
+  },
+  {
+    "sentence": "He added: “The risk here is that, like winter fuel payments, the additional benefit of cutting support schemes for clean technology isn’t noticed by the majority, but really is by those that lose out.”",
+    "core_sents": [
+      {
+        "type": "actor_issue",
+        "subject": "Institute of Public Policy Research",
+        "direction": "opposition",
+        "object": null,
+        "issue": "cutting support schemes for clean technology"
+      }
+    ]
+  },
+  {
+    "sentence": "As political hostages to fortune go, Ed Miliband's pledge to cut household energy bills by £300 a year by 2030 was, as they say in Whitehall, \"unwise\".",
+    "core_sents": [
+      {
+        "type": "actor_issue",
+        "subject": "UK Government",
+        "direction": "opposition",
+        "object": null,
+        "issue": "cut household energy bills by £300 a year by 2030"
+      }
+    ]
+  },
+  {
+    "sentence": "The findings were mirrored in analysis for The Times carried out last month, which found households will still be paying more for energy by the end of the decade than they were when Labour came to power last year.",
+    "core_sents": [
+      {
+        "type": "actor_issue",
+        "subject": "The Times",
+        "direction": "ambivalent",
+        "object": null,
+        "issue": "households will still be paying more for energy"
+      }
+    ]
+  },
+  {
+    "sentence": "Leo Vincent, a senior policy adviser at the E3G thinktank, said: “If this is really what the government is planning, it is robbing Peter to pay Paul”.",
+    "core_sents": [
+      {
+        "type": "actor-actor",
+        "subject": "E3G",
+        "direction": "opposition",
+        "object": "UK Government",
+        "issue": null
+      }
+    ]
+  },
+  {
+    "sentence": "The problem of the last 14 years is that political expediency always came above the national interest",
+    "core_sents": [
+      {
+        "type": "NA",
+        "subject": "",
+        "direction": "NA",
+        "object": null,
+        "issue": null
+      }
+    ]
+  },
+  {
+    "sentence": "As I am here, scores of people are being searched for after being buried under a landslide",
+    "core_sents": [
+      {
+        "type": "actor_issue",
+        "subject": "Kenya's Deputy President",
+        "direction": "ambivalent",
+        "object": null,
+        "issue": "landslide disaster"
+      }
+    ]
+  },
+  {
+    "sentence": "The Treasury declined to comment on budget speculation, but those in the energy industry say the plans could backfire in the longer term.",
+    "core_sents": [
+      {
+        "type": "actor_issue",
+        "subject": "Treasury",
+        "direction": "ambivalent",
+        "object": null,
+        "issue": "budget speculation"
+      },
+      {
+        "type": "actor_issue",
+        "subject": "energy industry",
+        "direction": "opposition",
+        "object": null,
+        "issue": "the plans"
+      }
+    ]
+  },
+  {
+    "sentence": "The rest of the savings will come from cutting levies that the government imposes on energy bills, including the energy company obligation (ECO).",
+    "core_sents": [
+      {
+        "type": "actor_issue",
+        "subject": "UK Government",
+        "direction": "support",
+        "object": null,
+        "issue": "cutting levies on energy bills"
+      }
+    ]
+  },
+  {
+    "sentence": "This could allow ministers to invest huge amounts to subsidise technologies like solar power and batteries that could allow some homes to eliminate almost all electricity costs by generating and storing their own www.power.",
+    "core_sents": [
+      {
+        "type": "actor_issue",
+        "subject": "UK Government",
+        "direction": "support",
+        "object": null,
+        "issue": "subsidise technologies like solar power and batteries"
+      }
+    ]
+  },
+  {
+    "sentence": "Claire Coutinho, the Conservative shadow energy secretary, said: \"There are 29 million families who were promised that Labour would cut their bills by £300, but ... this plan will benefit very few of those families\"",
+    "core_sents": [
+      {
+        "type": "actor_issue",
+        "subject": "Conservative Party",
+        "direction": "opposition",
+        "object": null,
+        "issue": "cut their bills by £300"
+      }
+    ]
+  },
+  {
+    "sentence": "About a million people are expected to have bills cut as a result of the new loan scheme",
+    "core_sents": [
+      {
+        "type": "NA",
+        "subject": "",
+        "direction": "NA",
+        "object": null,
+        "issue": null
+      }
+    ]
+  },
+  {
+    "sentence": "The move will mean restricting heat-pump subsidies so that only those receiving certain benefits will be allowed to claim them, sharply bringing down costs to the government.",
+    "core_sents": [
+      {
+        "type": "actor_issue",
+        "subject": "UK Government",
+        "direction": "opposition",
+        "object": null,
+        "issue": "heat-pump subsidies"
+      }
+    ]
+  },
+  {
+    "sentence": "This is a disastrous sticking plaster ‘solution’ that would let down working families across the country who need the security of predictable and low bills. It would leave Britain vulnerable to the whims of fossil fuel despots, put thousands of jobs at risk and blow a hole clean through the UK’s plans for climate action.",
+    "core_sents": [
+      {
+        "type": "actor_issue",
+        "subject": "E3G",
+        "direction": "opposition",
+        "object": null,
+        "issue": "cutting support schemes for clean technology"
+      }
+    ]
+  },
+  {
+    "sentence": "Some of the wording in the plan seems to deprioritise insulation,” said Christopher Hammond, the chief executive of UK100, a group of local government leaders for climate action",
+    "core_sents": [
+      {
+        "type": "actor_issue",
+        "subject": "UK100",
+        "direction": "opposition",
+        "object": null,
+        "issue": "deprioritise insulation"
+      }
+    ]
+  },
+  {
+    "sentence": "We can help the world in its the transition to clean energy,” he said.",
+    "core_sents": [
+      {
+        "type": "actor_issue",
+        "subject": "he",
+        "direction": "support",
+        "object": null,
+        "issue": "transition to clean energy"
+      }
+    ]
+  },
+  {
+    "sentence": "Also, solar panels have dropped rapidly in price to about £6,000 including installation for the average house, and are now available in forms such as DIY plug-in sets and balcony panels",
+    "core_sents": null
+  },
+  {
+    "sentence": "Those consulted on the plans say the chancellor is particularly looking at reducing or eliminating the energy company obligation, under which energy firms help pay for home improvement measures such as insulation and new heating schemes",
+    "core_sents": [
+      {
+        "type": "actor-actor",
+        "subject": "consultants",
+        "direction": "ambivalent",
+        "object": "UK Chancellor",
+        "issue": "reducing or eliminating the energy company obligation"
+      }
+    ]
+  },
+  {
+    "sentence": "I think if we're in the late 2030s and we still haven't figured out how to make hydrogen cheaply then I'll be worried ?",
+    "core_sents": [
+      {
+        "type": "NA",
+        "subject": "",
+        "direction": "NA",
+        "object": null,
+        "issue": null
+      }
+    ]
+  },
+  {
+    "sentence": "That has been the experience of tens of thousands of households after what MPs have condemned as the “catastrophic failure” of the energy company obligation (Eco) insulation programme run by the last Conservative government, the results of which have only recently been uncovered.",
+    "core_sents": [
+      {
+        "type": "actor_issue",
+        "subject": "MPs",
+        "direction": "opposition",
+        "object": null,
+        "issue": "catastrophic failure of the energy company obligation (Eco) insulation programme"
+      }
+    ]
+  },
+  {
+    "sentence": "So why is this, what is driving up prices and is there anything the government can do to get back on track?.",
+    "core_sents": [
+      {
+        "type": "NA",
+        "subject": "",
+        "direction": "NA",
+        "object": null,
+        "issue": null
+      }
+    ]
+  },
+  {
+    "sentence": "Rightwing parties were winning elections and topping polls because “people are deeply unhappy with the status quo”, he said",
+    "core_sents": [
+      {
+        "type": "actor_issue",
+        "subject": "Rightwing parties",
+        "direction": "NA",
+        "object": null,
+        "issue": "people are deeply unhappy with the status quo"
+      }
+    ]
+  },
+  {
+    "sentence": "Lula da Silva, the president of host nation Brazil, said: “It took 28 climate Cops for us to commit, in Dubai, to a just, orderly and equitable energy transition”.",
+    "core_sents": [
+      {
+        "type": "actor_issue",
+        "subject": "Brazil",
+        "direction": "support",
+        "object": null,
+        "issue": "just, orderly and equitable energy transition"
+      }
+    ]
+  },
+  {
+    "sentence": "Dale Vince, the renewable energy magnate who has donated more than £6 million to the Labour Party, also said that plans to roll out cheap loans for households should be restricted to solar panels.",
+    "core_sents": [
+      {
+        "type": "actor_issue",
+        "subject": "Ecotricity",
+        "direction": "opposition",
+        "object": null,
+        "issue": "subsidies for renewable energy"
+      }
+    ]
+  },
+  {
+    "sentence": "Hammond said the best way to ensure quality was for local governments to work closely with local suppliers over the long term, building relationships and trust so that problems could be rectified and work of a high standard replicated across areas, potentially through “street by street” retrofit programmes.",
+    "core_sents": [
+      {
+        "type": "actor-actor",
+        "subject": "UK Government",
+        "direction": "support",
+        "object": "local suppliers",
+        "issue": "street by street retrofit programmes"
+      }
+    ]
+  },
+  {
+    "sentence": "The Department for Energy Security and Net Zero said: \"This is nonsense - families will see an average of £150 in costs off their bill this April thanks to government action which has been welcomed by Martin Lewis [the consumer finance expert] and Citizens Advice\"",
+    "core_sents": [
+      {
+        "type": "actor_issue",
+        "subject": "Department for Energy Security and Net Zero",
+        "direction": "opposition",
+        "object": null,
+        "issue": "levies increase on gas pipelines and high‑voltage electricity grid"
+      }
+    ]
+  },
+  {
+    "sentence": "At the budget in November, Rachel Reeves said: \"We are keeping our promise to get energy bills down and cut the cost of living, with £150 cut from the average household energy bill from April.\"",
+    "core_sents": [
+      {
+        "type": "actor_issue",
+        "subject": "UK Government",
+        "direction": "support",
+        "object": null,
+        "issue": "energy bills down"
+      }
+    ]
+  },
+  {
+    "sentence": "However, while BP's was selected as a priority project to receive government support and store its emissions under the North Sea, H2NorthEast is still awaiting selection",
+    "core_sents": [
+      {
+        "type": "actor-actor",
+        "subject": "UK Government",
+        "direction": "support",
+        "object": "BP",
+        "issue": "receive government support and store emissions under the North Sea (blue hydrogen project with carbon capture and storage)"
+      },
+      {
+        "type": "actor-actor",
+        "subject": "UK Government",
+        "direction": "ambivalent",
+        "object": "H2NorthEast (Kellas and SSE)",
+        "issue": "awaiting selection for government support (blue hydrogen project with carbon capture and storage)"
+      }
+    ]
+  },
+  {
+    "sentence": "What's worse is that Ed Miliband and his ministers are ignoring the core problem: that Britain has the highest electricity prices in the world and their plans to decarbonise at breakneck speed will send prices even higher whilst lining the pockets of wind developers.",
+    "core_sents": [
+      {
+        "type": "actor_issue",
+        "subject": "Labour Party",
+        "direction": "opposition",
+        "object": null,
+        "issue": "decarbonise at breakneck speed"
+      }
+    ]
+  },
+  {
+    "sentence": "Reeves and the prime minister have identified high energy bills as being a major source of financial pressure for voters and are planning a relief package likely to cost about £3bn a year.",
+    "core_sents": [
+      {
+        "type": "actor_issue",
+        "subject": "Reeves and the prime minister",
+        "direction": "opposition",
+        "object": null,
+        "issue": "high energy bills"
+      }
+    ]
+  },
+  {
+    "sentence": "The Earth can no longer sustain the development model based on the intensive use of fossil fuels that has prevailed for the last 200 years.",
+    "core_sents": null
+  },
+  {
+    "sentence": "In a sign of internal government concerns over the possible market reaction, Labour has organised a series of pre-budget “economic insight sessions” for Labour MPs with economists and former ministers in recent weeks.",
+    "core_sents": [
+      {
+        "type": "actor_issue",
+        "subject": "Labour",
+        "direction": "support",
+        "object": null,
+        "issue": "possible market reaction"
+      }
+    ]
+  },
+  {
+    "sentence": "Part of the answer could be in the pipelines Butterworth's company operates; it has been carrying out trials to prove that hydrogen can be safely blended in with natural gas, and the government has consulted on a \"minded-to\" position to allow up to 2 per cent of blending",
+    "core_sents": [
+      {
+        "type": "actor_issue",
+        "subject": "National Gas",
+        "direction": "support",
+        "object": null,
+        "issue": "hydrogen can be safely blended in with natural gas"
+      },
+      {
+        "type": "actor_issue",
+        "subject": "UK Government",
+        "direction": "support",
+        "object": null,
+        "issue": "allow up to 2 per cent of hydrogen blending"
+      }
+    ]
+  },
+  {
+    "sentence": "Speaking in Brazil, the energy secretary said acting to rein in the greenhouse gas emissions driving global warming would create jobs and protect future generations.",
+    "core_sents": [
+      {
+        "type": "actor_issue",
+        "subject": "UK Government",
+        "direction": "support",
+        "object": null,
+        "issue": "acting to rein in the greenhouse gas emissions driving global warming"
+      }
+    ]
+  },
+  {
+    "sentence": "And, because Miliband has set a 2030 deadline to produce almost all of our power from clean sources, many of these costs are on bills sooner and higher than they otherwise would be.",
+    "core_sents": [
+      {
+        "type": "actor_issue",
+        "subject": "Labour Party",
+        "direction": "opposition",
+        "object": null,
+        "issue": "produce almost all of our power from clean sources by 2030"
+      }
+    ]
+  },
+  {
+    "sentence": "This will be achieved by removing levies used to subsidise older renewable energy projects from bills and shifting the costs to general taxation instead.",
+    "core_sents": [
+      {
+        "type": "actor_issue",
+        "subject": "Labour Party",
+        "direction": "support",
+        "object": null,
+        "issue": "abolishing renewables subsidies"
+      }
+    ]
+  },
+  {
+    "sentence": "He urged world leaders to find funds to support vulnerable nations, saying climate finance was their main hope now that governments were cutting overseas development aid.",
+    "core_sents": [
+      {
+        "type": "actor-actor",
+        "subject": "Kenya Deputy President Kithure Kindiki",
+        "direction": "support",
+        "object": "world leaders",
+        "issue": "climate finance"
+      }
+    ]
+  },
+  {
+    "sentence": "When BP pulled the plug on H2Teesside, the most eye‑catching reason it gave was it was up against a rival proposal to build a data centre on the same site, which had won planning consent",
+    "core_sents": [
+      {
+        "type": "actor-actor",
+        "subject": "BP",
+        "direction": "opposition",
+        "object": "data centre proposal",
+        "issue": null
+      }
+    ]
+  },
+  {
+    "sentence": "Labour's Green Prosperity Plan (will) create 650,000 good jobs, cut bills by £300 on average and deliver real energy security,\" the party stated.",
+    "core_sents": [
+      {
+        "type": "actor_issue",
+        "subject": "Labour Party",
+        "direction": "support",
+        "object": null,
+        "issue": "create 650,000 good jobs"
+      },
+      {
+        "type": "actor_issue",
+        "subject": "Labour Party",
+        "direction": "support",
+        "object": null,
+        "issue": "cut bills by £300 on average"
+      },
+      {
+        "type": "actor_issue",
+        "subject": "Labour Party",
+        "direction": "support",
+        "object": null,
+        "issue": "deliver real energy security"
+      }
+    ]
+  },
+  {
+    "sentence": "He also pointed out the positive story of the green energy revolution in Africa, noting that Kenya already gets 93% of its electricity from clean energy and was a vital source of critical minerals needed for wind turbines, solar panels and batteries",
+    "core_sents": [
+      {
+        "type": "actor_issue",
+        "subject": "He",
+        "direction": "support",
+        "object": null,
+        "issue": "supporting renewable energy development"
+      }
+    ]
+  },
+  {
+    "sentence": "Richard Tice, the party's deputy leader, said the move was part of Miliband's \"fanatical net-zero crusade\" that would pile \"even more pain on to households that have already been stung by energy bills soaring by hundreds of pounds\".",
+    "core_sents": [
+      {
+        "type": "actor_issue",
+        "subject": "Reform UK",
+        "direction": "opposition",
+        "object": null,
+        "issue": "fanatical net-zero crusade"
+      }
+    ]
+  },
+  {
+    "sentence": "Another industry source said the government wanted energy suppliers to help ministers \"take the credit for the cut in bills\", adding: \"They made it clear that, when we communicated to our customers about the April price drop we [should] say that it is because of the wonderful government\"",
+    "core_sents": [
+      {
+        "type": "actor-actor",
+        "subject": "UK Government",
+        "direction": "support",
+        "object": "energy suppliers",
+        "issue": "cut in bills"
+      }
+    ]
+  },
+  {
+    "sentence": "Today that target looks dead in the water, amid slow progress and setbacks that culminated this month in BP scrapping Britain's biggest clean hydrogen project",
+    "core_sents": null
+  },
+  {
+    "sentence": "Hundreds of thousands of homeowners will lose their right to subsidies for eco-friendly heat pumps as a result of government plans to bring down energy bills at the budget.",
+    "core_sents": [
+      {
+        "type": "actor_issue",
+        "subject": "homeowners",
+        "direction": "opposition",
+        "object": null,
+        "issue": "subsidies for eco-friendly heat pumps"
+      }
+    ]
+  },
+  {
+    "sentence": "She said countries were shifting to clean energy faster than implied by their climate targets, some of which she said had been less ambitious than planned because of \"the bullying we see from Washington\"",
+    "core_sents": [
+      {
+        "type": "actor_issue",
+        "subject": "Christiana Figueres",
+        "direction": "support",
+        "object": null,
+        "issue": "shifting to clean energy"
+      }
+    ]
+  },
+  {
+    "sentence": "Almost 250,000 rooftop solar installations were carried out, meaning 1.6 million homes - or about 1 in 20 households - now have the technology.",
+    "core_sents": null
+  },
+  {
+    "sentence": "During the most recent call, on Thursday last week, staff at the Department for Energy Security and Net Zero implored companies to help ministers \"take the credit for the cut in bills\".",
+    "core_sents": [
+      {
+        "type": "actor-actor",
+        "subject": "Department for Energy Security and Net Zero",
+        "direction": "support",
+        "object": "energy companies",
+        "issue": "cut in bills"
+      }
+    ]
+  },
+  {
+    "sentence": "The Cop30 negotiations will carry on for two weeks, discussing how to “transition away from fossil fuels”, protect global forests and raise the money needed to rescue poor countries from catastrophe",
+    "core_sents": [
+      {
+        "type": "NA",
+        "subject": "",
+        "direction": "NA",
+        "object": null,
+        "issue": null
+      }
+    ]
+  },
+  {
+    "sentence": "Stern told The Times his message to the Tories, who have joined Reform UK in calling to scrap Britain's 2050 net zero target, was that renewables and green technology were \"your growth story\".",
+    "core_sents": [
+      {
+        "type": "actor_issue",
+        "subject": "Lord Stern of Brentford",
+        "direction": "support",
+        "object": null,
+        "issue": "renewables and green technology"
+      }
+    ]
+  },
+  {
+    "sentence": "The sector needs certainty and security now if any meaningful progress on tackling fuel poverty and driving down home heating bills is going to be made in this parliament,” she added.",
+    "core_sents": [
+      {
+        "type": "actor_issue",
+        "subject": "insulation sector",
+        "direction": "support",
+        "object": null,
+        "issue": "tackling fuel poverty and driving down home heating bills"
+      }
+    ]
+  },
+  {
+    "sentence": "Key to success for the meeting will be plotting a future course towards holding down global temperatures as far as possible",
+    "core_sents": null
+  },
+  {
+    "sentence": "The Labour government has appeared to share its predecessors' enthusiasm, describing hydrogen as \"essential to achieve the government's clean energy superpower and growth missions\".",
+    "core_sents": [
+      {
+        "type": "actor_issue",
+        "subject": "Labour Party",
+        "direction": "support",
+        "object": null,
+        "issue": "hydrogen as essential to achieve the government's clean energy superpower and growth missions"
+      }
+    ]
+  },
+  {
+    "sentence": "The fortnight-long conference, which starts today, is effectively the deadline by which nations must present plans for cutting emissions, but is taking place in the shadow of a backlash led by President www.Trump.No highlevel American official is at the summit, despite the US being the world's second-biggest source of greenhouse gas emissions after China.",
+    "core_sents": [
+      {
+        "type": "actor-actor",
+        "subject": "backlash",
+        "direction": "ambivalent",
+        "object": "Donald Trump",
+        "issue": null
+      }
+    ]
+  },
+  {
+    "sentence": "Current national plans on emissions cuts from big countries would lead to temperature rises of 2.5C above preindustrial levels, which would spell devastation and extreme weather around the world",
+    "core_sents": [
+      {
+        "type": "actor_issue",
+        "subject": "big countries' governments",
+        "direction": "opposition",
+        "object": null,
+        "issue": "temperature rises of 2.5C above preindustrial levels"
+      }
+    ]
+  },
+  {
+    "sentence": "The chancellor also scrapped what she described as a \"failed scheme\" to improve the energy efficiency of poorer households, which was also funded through bills.",
+    "core_sents": [
+      {
+        "type": "actor_issue",
+        "subject": "UK Chancellor (Jeremy Hunt)",
+        "direction": "opposition",
+        "object": null,
+        "issue": "improve the energy efficiency of poorer households"
+      }
+    ]
+  },
+  {
+    "sentence": "Badenoch criticises Starmer for going to Cop30, claiming other leaders from 'serious' countries were staying away",
+    "core_sents": [
+      {
+        "type": "actor-actor",
+        "subject": "Conservative Party",
+        "direction": "opposition",
+        "object": "Labour Party",
+        "issue": null
+      },
+      {
+        "type": "actor_issue",
+        "subject": "Conservative Party",
+        "direction": "opposition",
+        "object": null,
+        "issue": "going to Cop30"
+      }
+    ]
+  },
+  {
+    "sentence": "Reeves and the prime minister, Keir Starmer, have been looking for ways to bring energy bills down by an average of £170 a year, having promised before the election to cut them by £300",
+    "core_sents": [
+      {
+        "type": "actor_issue",
+        "subject": "Labour Party",
+        "direction": "support",
+        "object": null,
+        "issue": "bring energy bills down by an average of £170 a year"
+      }
+    ]
+  },
+  {
+    "sentence": "Stern told The Times his message to the Tories, who have joined Reform UK in calling to scrap Britain's 2050 net zero target, was that renewables and green technology were \"your growth story\".",
+    "core_sents": [
+      {
+        "type": "actor-actor",
+        "subject": "Lord Stern of Brentford",
+        "direction": "support",
+        "object": "Conservative Party",
+        "issue": null
+      },
+      {
+        "type": "actor_issue",
+        "subject": "Lord Stern of Brentford",
+        "direction": "support",
+        "object": null,
+        "issue": "renewables and green technology"
+      },
+      {
+        "type": "actor_issue",
+        "subject": "Conservative Party",
+        "direction": "opposition",
+        "object": null,
+        "issue": "scrap Britain's 2050 net zero target"
+      }
+    ]
+  },
+  {
+    "sentence": "The number of solar panels installed in Britain this year has reached a record level, largely thanks to new housing developments",
+    "core_sents": [
+      {
+        "type": "actor_issue",
+        "subject": "new housing developments",
+        "direction": "support",
+        "object": null,
+        "issue": "record level of solar panel installations"
+      }
+    ]
+  },
+  {
+    "sentence": "Unveiling Britain's revamped energy strategy in 2022, Boris Johnson declared: \"We're going to produce vastly more hydrogen, which is easy to store, ready to go whenever we need it, and is a low-carbon superfuel of the future.\"",
+    "core_sents": [
+      {
+        "type": "actor_issue",
+        "subject": "Conservative Party",
+        "direction": "support",
+        "object": null,
+        "issue": "produce vastly more hydrogen"
+      }
+    ]
+  },
+  {
+    "sentence": "It is the mother who has to walk 10km to get water",
+    "core_sents": null
+  },
+  {
+    "sentence": "Clearly energy companies will need to communicate to their customers about what is happening to their bills in April, but exactly how we do that is quite complicated.",
+    "core_sents": [
+      {
+        "type": "actor_issue",
+        "subject": "energy companies",
+        "direction": "NA",
+        "object": null,
+        "issue": "lowering energy costs"
+      }
+    ]
+  },
+  {
+    "sentence": "Last year, the National Audit Office warned of fraud and poor quality in some of the work undertaken under the scheme.",
+    "core_sents": [
+      {
+        "type": "actor_issue",
+        "subject": "National Audit Office",
+        "direction": "opposition",
+        "object": null,
+        "issue": "fraud and poor quality in some of the work undertaken under the scheme"
+      }
+    ]
+  },
+  {
+    "sentence": "This is because, despite the plan to move away from gas for home heating, the network needs billions of pounds of investment to remain reliable and safe during this transition period.",
+    "core_sents": [
+      {
+        "type": "actor_issue",
+        "subject": "the network",
+        "direction": "support",
+        "object": null,
+        "issue": "investment in transmission network"
+      }
+    ]
+  },
+  {
+    "sentence": "Speaking on the eve of the UN’s climate summit, Ed Miliband said it was the cause progressives could rally around, because most people recognise populist parties have got it wrong.",
+    "core_sents": [
+      {
+        "type": "actor-actor",
+        "subject": "Labour Party",
+        "direction": "opposition",
+        "object": "populist parties",
+        "issue": null
+      }
+    ]
+  },
+  {
+    "sentence": "\"It matters precisely because of the cost of living, because if we are going to create good jobs for the future, this is the biggest potential opportunity we have,\" he said.",
+    "core_sents": [
+      {
+        "type": "actor_issue",
+        "subject": "Labour Party",
+        "direction": "support",
+        "object": null,
+        "issue": "decrease costs of living"
+      }
+    ]
+  },
+  {
+    "sentence": "Claire Coutinho, the Conservative shadow energy secretary, said: \"There are 29 million families who were promised that Labour would cut their bills by £300, but ... this plan will benefit very few of those families\"",
+    "core_sents": [
+      {
+        "type": "actor_issue",
+        "subject": "Conservative Party",
+        "direction": "opposition",
+        "object": null,
+        "issue": "cutting household energy bills by £300"
+      }
+    ]
+  },
+  {
+    "sentence": "Gas bills are also expected to rise.. so is it all bad news?",
+    "core_sents": null
+  },
+  {
+    "sentence": "Your electricity bill in 2030 Wholesale Network New levies Generation subsidies Miscellaneous Now £7 £324 £207 £186 £241 £966 2030 £38 £269 £342 £158 £237 £1,045 Based on 3,100 kWh annual usage",
+    "core_sents": [
+      {
+        "type": "NA",
+        "subject": "",
+        "direction": "NA",
+        "object": null,
+        "issue": null
+      }
+    ]
+  },
+  {
+    "sentence": "Reform UK said that Labour's manifesto pledge to reduce energy bills lay \"in tatters\", adding that the new proposal \"drives the final nail into that broken promise\".",
+    "core_sents": [
+      {
+        "type": "actor-actor",
+        "subject": "Reform UK",
+        "direction": "opposition",
+        "object": "Labour",
+        "issue": "reduce energy bills"
+      }
+    ]
+  },
+  {
+    "sentence": "\"I think it's probably fair to say that 10 gigawatts by 2030 is undeliverable,\" says Clare Jackson, chief executive of Hydrogen UK, a trade body.",
+    "core_sents": [
+      {
+        "type": "actor_issue",
+        "subject": "Hydrogen UK",
+        "direction": "opposition",
+        "object": null,
+        "issue": "10 gigawatts by 2030"
+      }
+    ]
+  },
+  {
+    "sentence": "The company said this was likely to indicate \"incorrect installation or maintenance\".",
+    "core_sents": [
+      {
+        "type": "actor_issue",
+        "subject": "QBE",
+        "direction": "opposition",
+        "object": null,
+        "issue": "incorrect installation or maintenance"
+      }
+    ]
+  },
+  {
+    "sentence": "The government is offering subsidies to selected hydrogen developers to help bridge the gap between their costs and the price customers are willing to pay",
+    "core_sents": [
+      {
+        "type": "actor_issue",
+        "subject": "UK Government",
+        "direction": "support",
+        "object": null,
+        "issue": "subsidies for renewable energy"
+      }
+    ]
+  },
+  {
+    "sentence": "Sam Alvis, the head of energy and environment at the Institute of Public Policy Research thinktank, said: “The urge to get bills down is the right one, everything should be on the table.”",
+    "core_sents": [
+      {
+        "type": "actor_issue",
+        "subject": "Institute of Public Policy Research",
+        "direction": "support",
+        "object": null,
+        "issue": "getting bills down"
+      }
+    ]
+  },
+  {
+    "sentence": "has been shelved by all but the most faithful",
+    "core_sents": [
+      {
+        "type": "actor_issue",
+        "subject": "political parties",
+        "direction": "opposition",
+        "object": null,
+        "issue": "producing enough hydrogen to use it for home heating"
+      }
+    ]
+  },
+  {
+    "sentence": "The chancellor added the economic challenges facing the UK – including global tariffs, sticky inflation, volatile supply chains and defence spending – had got worse since last year’s financial statement.",
+    "core_sents": [
+      {
+        "type": "actor_issue",
+        "subject": "HM Treasury",
+        "direction": "opposition",
+        "object": null,
+        "issue": "economic challenges facing the UK – including global tariffs, sticky inflation, volatile supply chains and defence spending"
+      }
+    ]
+  },
+  {
+    "sentence": "Keir Starmer is understood to be particularly worried about the impact of an expected £100 rise in energy bills next spring, and wants to do enough to eliminate that and bring down costs even further.",
+    "core_sents": [
+      {
+        "type": "actor_issue",
+        "subject": "Labour Party",
+        "direction": "opposition",
+        "object": null,
+        "issue": "expected £100 rise in energy bills next spring"
+      }
+    ]
+  }
+]

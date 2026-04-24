@@ -1,0 +1,18 @@
+[
+  {
+    "sentence": "Doubling the government's previous ambition, he set a target for 10 gigawatts of clean hydrogen production by 2030.",
+    "type": "actor-actor",
+    "subject": "UK government",
+    "direction": "support",
+    "object": "clean hydrogen production target",
+    "reference": ""
+  },
+  {
+    "sentence": "unless we have another molecular store for producing interseasonal electricity ?",
+    "type": "actor-actor",
+    "subject": "Bell",
+    "direction": "ambivalent",
+    "object": "",
+    "reference": ""
+  }
+]

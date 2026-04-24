@@ -1,0 +1,46 @@
+[
+  {
+    "sentence": "Defeatism never took a single of a fraction of a degree of global warming It never created a single job It never did anything.” Miliband spoke as world leaders have been meeting in Belém, Brazil, before the crucial Cop30 conference begins on Monday, at which governments of every stripe will attempt to forge a pathway that limits global temperatures and avoids the ravages of climate breakdown.",
+    "core_sents": [
+      {
+        "type": "actor_issue",
+        "subject": "Labour Party",
+        "direction": "opposition",
+        "object": null,
+        "issue": "global warming"
+      }
+    ]
+  },
+  {
+    "sentence": "Also, solar panels have dropped rapidly in price to about £6,000 including installation for the average house, and are now available in forms such as DIY plug-in sets and balcony panels",
+    "core_sents": null
+  },
+  {
+    "sentence": "Speaking on the eve of the UN’s climate summit, Ed Miliband said it was the cause progressives could rally around, because most people recognise populist parties have got it wrong.",
+    "core_sents": [
+      {
+        "type": "actor_issue",
+        "subject": "Labour Party",
+        "direction": "support",
+        "object": null,
+        "issue": "tackling the climate emergency"
+      }
+    ]
+  },
+  {
+    "sentence": "These are the people that can least afford solar panels, probably.",
+    "core_sents": null
+  },
+  {
+    "sentence": "He added: “The risk here is that, like winter fuel payments, the additional benefit of cutting support schemes for clean technology isn’t noticed by the majority, but really is by those that lose out.”",
+    "core_sents": [
+      {
+        "type": "actor_issue",
+        "subject": "Institute of Public Policy Research",
+        "direction": "opposition",
+        "object": null,
+        "issue": "clean technology subsidies"
+      }
+    ]
+  }
+]
