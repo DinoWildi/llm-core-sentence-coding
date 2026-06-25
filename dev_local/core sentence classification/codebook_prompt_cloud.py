@@ -12,55 +12,18 @@ from typing import List, Optional, Literal
 
 ## Loading data ##
 # current dataset: UK newspaper data
-fp = Path("/pfs/data6/home/hd/hd_hd/hd_gn354/projects/llm-coding/data")
+fp = Path("../../data")
 df_uk = read_tabular(fp / "UK_texts.csv")
 input = df_uk['contexted']
 
 ## Creating setup and functions ##
 
-GPTSMALL = 'gpt-oss:20b'
-GPTLARGE = 'gpt-oss:120b'
-ollama.pull(GPTLARGE)
-
-client = ollama.Client()
-
-def classify_text(text, system_message, model):
-
-  # clean the text 
-  text = re.sub(r'\s+', ' ', text).strip()
-
-  # construct input
-
-  messages = [
-    # system prompt
-    {"role": "system", "content": system_message},
-    # user input
-    {"role": "user", "content": text},
-  ]
-
-  # set some options controlling generation behavior
-  opts = {
-      'seed': 42,         # seed controlling random number generation and thus stochastic generation
-      'temperature': 0.0, # hyper parameter controlling "craetivity", see https://learnprompting.org/docs/basics/configuration_hyperparameters
-      #'max_tokens': 3     # maximum numbers of tokens to generate in completion
-  }
-  response = client.chat(
-    model=model,
-    messages=messages,
-    options=opts
-  )
-  
-  # NOTE: this changed slightly compared to using `openai` Client
-  result = response.message.content.strip()
-  
-  return result
-
 class CoreSent(BaseModel):
-    type: Literal['actor-actor', 'actor_issue', 'NA'] = Field(..., description = "The category of core sentence detected")
-    subject: str = Field(..., description="The subject of the core sentence")
-    direction: Literal["support", "opposition", "ambivalent", 'NA'] = Field(..., description = "The stance taken by the actor towards the subject")
-    object: Optional[str] = Field(None, description = "The object of the core sentence")
-    issue: Optional[str] = Field(None, description = "An issue being mentioned in an actor-actor sentence")
+    type: Literal['actor-actor', 'actor-issue', 'NA'] = Field(..., description = "TYPE")
+    subject: str = Field(..., description="SUBJECT ORGANIZATION")
+    direction: Literal["support", "opposition", "ambivalent", 'NA'] = Field(..., description = "DIRECTION")
+    object: Optional[str] = Field(None, description = "OBJECT")
+    issue: Optional[str] = Field(None, description = "ISSUE")
 
 class CSResponse(BaseModel):
     sentence: str = Field(..., description="The grammatical sentence you coded")
@@ -71,29 +34,28 @@ class CSResponse(BaseModel):
 
 json_schema = CSResponse.model_json_schema()
 
-def transform_and_save(raw_outputs: List[dict], output_file: str = "llm_outputs.json") -> None:
-    """
-    Transforms raw Ollama outputs into validated CSResponse objects and saves them as a JSON file.
+print(json_schema)
 
-    Args:
-        raw_outputs: List of raw responses from Ollama (e.g., your `out` list).
-        output_file: Path to the output JSON file.
-    """
+def transform_and_save(raw_outputs: List[dict], output_file: str = "llm_outputs.json") -> None:
+    
     validated_outputs = []
 
     for raw in raw_outputs:
         try:
-            # Extract the content from the Ollama response
             content = raw.get("message", {}).get("content", "{}")
+            # Remove Markdown code block markers if present
+            if content.startswith("```json") and content.endswith("```"):
+                content = content[6:-2].strip()  # Remove ```json and ```
+            elif content.startswith("```") and content.endswith("```"):
+                content = content[2:-2].strip()  # Remove ``` and ```
+
             parsed = json.loads(content)
-            # Validate and parse using Pydantic
             validated = CSResponse(**parsed)
             validated_outputs.append(validated.model_dump())
         except (ValidationError, json.JSONDecodeError, AttributeError) as e:
             print(f"Skipping invalid response: {raw}. Error: {e}")
             continue
 
-    # Save to JSON file
     with open(output_file, "w", encoding="utf-8") as f:
         json.dump(validated_outputs, f, indent=2, ensure_ascii=False)
 
@@ -467,17 +429,40 @@ Examples:
 
 ## Output
 
-Return the extracted variables according to the following JSON scheme:
+Return a JSON with the following variables:
+- Type = TYPE
+- Subject = SUBJECT ORGANIZATION
+- Direction = DIRECTION
+- Object = OBJECT ORGANIZATION
+- Issue = ISSUE REFERENCE
 
+Use the following JSON scheme:
 {json.dumps(json_schema)}
+
+Return the raw string for future parsing without marking it as a JSON. Do not return anything else.
 '''
 
+# Inference
+
+GPTSMALL = 'gpt-oss:20b'
+GPTLARGE = 'gpt-oss:120b'
+GEMMA = 'gemma4:31b-cloud'
+
+modelname = GEMMA
+
+client = ollama.Client()
+
+print("Ollama client loaded. Beginning inference now.")
+
 out = []
+ctr = 0
 
 for text in input:
     messages = [
         {"role": "system", "content": sysprompt},
-        {"role": "user", "content": text}
+        {"role": "user", "content": f'''Code the following text according to the provided codebook:
+            {text}
+            Return your results according the specified JSON schema. Return as a raw string without any Markdown wrapping. Do not return anything else.'''}
     ]
 
     opts = {
@@ -486,12 +471,15 @@ for text in input:
     }
 
     response = client.chat(
-        model = GPTLARGE,
+        model = modelname,
         messages = messages,
         options = opts,
         format = json_schema
     )
     
+    content = response.get("message", {}).get("content", "{}")
+    print(json.loads(content))
+
     out.append(response)
 
-transform_and_save(out, "output_baseline.json")
+transform_and_save(out, f"output_baseline_gemma.json")

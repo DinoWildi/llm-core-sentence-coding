@@ -3,92 +3,114 @@
 #### Reading in ####
 
 fp <- path("C:/Users/dino1/Documents/GitHub/llm-core-sentence-coding/output")
-res_base <- fromJSON(paste0(fp, "\\output_short_gpt-oss_120b.json")) %>% 
+gemma <- fromJSON(paste0(fp, "\\output_cb_gemma.json")) %>% 
   json_transform() %>% 
   mutate(source = "llm")
-res_codebook <- fromJSON(paste0(fp, "\\output_baseline_gpt-oss_120b.json")) %>% 
+gpt <- fromJSON(paste0(fp, "\\output_cb_gptlarge_2.json")) %>% 
   json_transform() %>% 
   mutate(source = "llm")
-res_fewshot <- fromJSON(paste0(fp, "\\output_fewshot_gptlarge_v1.json")) %>% 
-  json_transform() %>% 
-  mutate(source = "llm")
+
 
 ## GPT-OSS 120b: codebook
 
-long_cb <- bind_rows(val, res_codebook) %>% 
-  mutate(sentence = fuzzygroup(sentence))
+long_gemma <- bind_rows(val, gemma) %>% 
+  mutate(sentence = fuzzygroup(sentence),
+         model = "gemma")
 
-long_cb <- group_by(long_cb, sentence) %>% 
+long_gemma <- group_by(long_gemma, sentence) %>% 
   mutate(id = max(id, na.rm = T)) %>% 
   ungroup()
 
-problems <- filter(long_cb, id == -Inf)
-long_cb <- filter(long_cb, id != -Inf) %>% 
+problems <- filter(long_gemma, id == -Inf)
+long_gemma <- filter(long_gemma, id != -Inf) %>% 
   arrange(id)
 
-## GPT-OSS 120b: Shortened
+## GPT-OSS 120b: CB
 
-long_sh <- bind_rows(val, res_base) %>% 
-  mutate(sentence = fuzzygroup(sentence))
+long_gpt <- bind_rows(val, gpt) %>% 
+  mutate(sentence = fuzzygroup(sentence),
+         model = "gpt")
 
-long_sh <- group_by(long_sh, sentence) %>% 
+long_gpt <- group_by(long_gpt, sentence) %>% 
   mutate(id = max(id, na.rm = T)) %>% 
   ungroup()
 
-problems <- filter(long_sh, id == -Inf)
-long_sh <- filter(long_sh, id != -Inf) %>% 
+problems <- filter(long_gpt, id == -Inf)
+long_gpt <- filter(long_gpt, id != -Inf) %>% 
   arrange(id)
 
-## GPT-OSS 120b: Fewshot
-
-long_fs <- bind_rows(val, res_fewshot) %>% 
-  mutate(sentence = fuzzygroup(sentence))
-
-long_fs <- group_by(long_fs, sentence) %>% 
-  mutate(id = max(id, na.rm = T)) %>% 
-  ungroup()
-
-problems <- filter(long_fs, id == -Inf)
-long_fs <- filter(long_fs, id != -Inf) %>% 
-  arrange(id)
   
 #### Core sentence detection (auto) ####
 
 ##Binary yes/no
-cbmat <- binary_eval(long_cb, "matrix") %>% 
-  mutate(prompt = "baseline")
-shmat <- binary_eval(long_sh, "matrix") %>% 
-  mutate(prompt = "shortened")
-fsmat <- binary_eval(long_fs, "matrix") %>% 
-  mutate(prompt = "fewshot")
-binmat <- bind_rows(cbmat, shmat, fsmat)
-binary_eval(long_cb, "f1")
-binary_eval(long_sh, "f1")
-binary_eval(long_fs, "f1")
+gemma_mat <- binary_eval(long_gemma, "matrix") %>% 
+  mutate(model = "gemma")
+gpt_mat <- binary_eval(long_gpt, "matrix") %>% 
+  mutate(model = "gpt")
+binmat <- bind_rows(gemma_mat, gpt_mat)
 
-##Number (plot)
-val <- mutate(val, prompttype = "human")
-long_cb <- mutate(long_cb, prompttype = "baseline")
-long_sh <- mutate(long_sh, prompttype = "shortened")
-long_fs <- mutate(long_fs, prompttype = "fewshot")
+binmat <- mutate(binmat, type = case_when(
+  y_true == 1 & y_pred == 1 ~ "tp",
+  y_true == 0 & y_pred == 1 ~ "fp",
+  y_true == 0 & y_pred == 0 ~ "tn",
+  y_true == 1 & y_pred == 0 ~ "fn"
+)) 
 
-omnibus <- bind_rows(val, long_cb, long_sh, long_fs)
+binmat <- select(binmat, model, type, Freq) %>% 
+  pivot_wider(names_from = "type",
+              values_from = "Freq")
 
-omniplot <- select(omnibus, id, sentence, prompttype, type) %>% 
-  group_by(id, prompttype) %>%
+binmat <- mutate(binmat,
+                 precision = tp / (tp+fp),
+                 recall = tp / (tp+fn)) %>% 
+  mutate(f1 = 2*((precision*recall)/(precision+recall)))
+
+pres_tab <- select(binmat, model, precision, recall, f1)
+xtable::xtable(pres_tab)
+
+binary_eval(long_gemma, "f1")
+binary_eval(long_gpt, "f1")
+
+##Number 
+
+nr_gpt <- mutate(long_gpt, cs = if_else(is.na(type), 0, 1)) %>% 
+  group_by(id, source, model) %>% 
+  summarise(n_cs = sum(cs))
+
+
+nr_gemma <- mutate(long_gemma, cs = if_else(is.na(type), 0, 1)) %>% 
+  group_by(id, source, model) %>% 
+  summarise(n_cs = sum(cs))
+nr <- bind_rows(nr_gemma, nr_gpt) %>% 
+  pivot_wider(names_from = source,
+              values_from = n_cs) %>% 
+  mutate(across(true:llm,
+                ~ if_else(is.na(.x), 0, .x)))
+
+f1(nr, "model")
+
+##(plot)
+val <- mutate(val, model = "human")
+long_gpt <- mutate(long_gpt, model = "gpt")
+long_gemma <- mutate(long_gemma, model = "gemma")
+
+omnibus <- bind_rows(val, long_gemma, long_gpt)
+
+omniplot <- select(omnibus, id, sentence, model, type) %>% 
+  group_by(id, model) %>%
   filter(!is.na(type)) %>% 
   summarise(number = n())
 
-omniplot <- left_join(select(omnibus, id, prompttype), omniplot) %>% 
+omniplot <- left_join(select(omnibus, id, model), omniplot) %>% 
   mutate(number = if_else(is.na(number), 0, number)) %>% 
   unique() %>% 
   group_by(id) %>% 
-  mutate(true = number[prompttype == "human"]) %>% 
+  mutate(true = number[model == "human"]) %>% 
   mutate(diff = number - true)
 
-ggplot(filter(omniplot, prompttype != "human")) +
+ggplot(filter(omniplot, model != "human")) +
   geom_bar(aes(x = diff,
-               fill = prompttype),
+               fill = model),
            position="dodge") +
   labs(x = "Difference between human coders and GPT-OSS 120b",
        y = "Number of grammatical sentences") +
@@ -96,28 +118,26 @@ ggplot(filter(omniplot, prompttype != "human")) +
   theme(legend.position = "bottom")
 
 ##Type
-#Codebook
-type_cb <- select(long_cb, id, sentence, type, source) %>% 
-  mutate(type = str_replace_all(type, "_", "-")) %>% 
+type_gemma <- select(long_gemma, id, sentence, type, source) %>% 
   reshaper("type") %>% 
   filter(!is.na(type)) %>% 
   mutate(across(c(true, llm),
                 ~ if_else(is.na(.x), 0, .x)))
-type_cb <- f1(type_cb, "type", output = "matrix") %>% 
+type_gemma <- f1(type_gemma, "type", output = "matrix") %>% 
   pivot_longer(cols = TP:FN,
                names_to = "result",
                values_to = "freq")
-type_cb <- group_by(type_cb, type, result) %>% 
+type_gemma <- group_by(type_gemma, type, result) %>% 
   summarise(n = sum(freq))
+f1(type_gemma, "type")
 
-#Shortened
-type_sh <- select(long_sh, id, sentence, type, source) %>% 
-  mutate(type = str_replace_all(type, "_", "-")) %>% 
+#GPT
+type_gpt <- select(long_gpt, id, sentence, type, source) %>%
   reshaper("type") %>% 
   filter(!is.na(type)) %>% 
   mutate(across(c(true, llm),
                 ~ if_else(is.na(.x), 0, .x)))
-f1(type_sh, "type")
+f1(type_gpt, "type")
 
 #Fewshot
 type_fs <- select(long_fs, id, sentence, type, source) %>% 
@@ -131,42 +151,89 @@ f1(type_fs, "type")
 
 #### Manual validation ####
 
-manval <- read_csv2(path("../../data/manval_ct.csv")) %>% 
-  filter(source != "true")
+manval_gpt <- read_csv2(path("../../output/gpt_cb_v2_validated.csv")) %>% 
+  mutate(cs_id = case_when(
+    cs_id < 74 ~ cs_id,
+    cs_id == 99 & is.na(type) ~ 0,
+    cs_id == 99 & is.na(type) == F ~ 99)) %>% 
+  mutate(across(.cols = contains("match"),
+                ~ if_else(is.na(.x), 0, .x)))
+
+manval_gemma <- read_csv2(path("../../output/gemma_cb_v2_validated.csv")) %>% 
+  mutate(cs_id = case_when(
+    cs_id < 74 ~ cs_id,
+    cs_id == 99 & is.na(type) ~ 0,
+    cs_id == 99 & is.na(type) == F ~ 99)) %>% 
+  mutate(across(.cols = contains("match"),
+                ~ if_else(is.na(.x), 0, .x)))
+
+manval <- bind_rows(manval_gpt, manval_gemma)
 
 ## Purely percentage-based among true CS
 
-manval_true <- filter(manval, cs_id < 74)
+manval_true <- filter(manval, cs_id < 74 & cs_id > 0)
+
+manval_true <- mutate(manval_true, match_whole_auto = if_else(
+  match_type == 1 & match_subject == 1 & match_object == 1 & match_direction == 1 & match_cat == 1,
+  1, 0
+))
 
 manval_plot <- pivot_longer(manval_true, 
                             cols = contains("match"),
                             names_to = "measure") %>% 
-  select(id, cs_id, sentence, prompttype, measure, value) %>% 
-  mutate(value = if_else(value == 2, 1, value)) %>%
-  mutate(value = if_else(value == 99, 0, value))
+  select(cs_id, sentence, model, measure, value)
 
-manval_plot <- group_by(manval_plot, prompttype, measure, value) %>% 
+#add missing true CS
+all_measures <- unique(manval_plot$measure)
+complete_df <- expand.grid(
+  cs_id = 1:73,
+  model = unique(manval_plot$model),
+  measure = all_measures
+)
+
+manval_plot <- left_join(complete_df, manval_plot) %>% 
+  arrange(model, cs_id) %>% 
+  mutate(value = if_else(is.na(value), 0, value))
+
+
+manval_plot <- group_by(manval_plot, model, measure, value) %>% 
   summarise(matches = n()) %>%
   mutate(value = if_else(value == 0, "notmatched", "matched")) %>% 
   pivot_wider(names_from = "value",
               values_from = "matches")
 
 manval_plot <- filter(manval_plot,
-                      measure != "match_det" & measure != "match_whole") %>% 
+                      measure %in% c("match_subject", 
+                                     "match_object", 
+                                     "match_direction", 
+                                     "match_cat",
+                                     "match_whole")) %>% 
   mutate(match_prop = round(100 * (matched/(notmatched + matched)), 3))
+
+manval_plot <- mutate(manval_plot, measure = factor(measure,
+                                                    levels = c("match_subject",
+                                                               "match_object",
+                                                               "match_direction",
+                                                               "match_cat",
+                                                               "match_whole"),
+                                                    labels = c("Subject",
+                                                               "Object",
+                                                               "Direction",
+                                                               "Issue category",
+                                                               "Core sentence")))
 
 ggplot(manval_plot) +
   geom_bar(aes(x = measure,
                y = match_prop,
-               fill = prompttype),
+               fill = model),
            stat = "identity",
            position = position_dodge2(padding = .15),
            width = .3) +
   labs(x = "Variable",
        y = "Proportion of correct codes",
-       fill = "Type of prompt") +
-  scale_x_discrete(limits = rev,
-                   labels = c("Subject", "Object", "Issue", "Direction")) +
+       fill = "Model") +
+  scale_fill_discrete(labels = c("Gemma 4 31B", "GPT-OSS 120B")) +
+  scale_y_continuous(breaks = seq(0,80,10)) +
   theme_minimal() +
   theme(legend.position = "bottom")
 
@@ -175,15 +242,16 @@ ggplot(manval_plot) +
 ggplot(manval_plot) +
   geom_bar(aes(x = match_prop,
                y = measure,
-               fill = prompttype),
+               fill = model),
            stat = "identity",
            position = position_dodge2(padding = .15),
            width = .3) +
   labs(x = "% of correct codes",
        y = "Variable",
-       fill = "Prompt") +
-  scale_y_discrete(labels = c("Direction", "Issue", "Object", "Subject")) +
+       fill = "Model") +
+  scale_fill_discrete(labels = c("Gemma 4", "GPT-OSS")) +
   scale_x_continuous(breaks = seq(0, 100, 10)) +
+  scale_y_discrete(limits = rev) +
   theme_minimal() +
   theme(legend.position = "bottom",
         text = element_text(size = 15))
@@ -220,3 +288,33 @@ ggplot(binplot) +
   theme_minimal() +
   theme(legend.position = "bottom",
         text = element_text(size = 15))
+
+
+
+#### Presentations Ireland ####
+
+results <- tibble(
+  model = c(rep("Gemma 4 31B", 6),
+            rep("GPT-OSS 120B", 6)),
+  measure = rep(c("Precision", "Recall", "F1"), 4),
+  type = c(rep("Binary", 3), rep("Number", 3), rep("Binary", 3), rep("Number", 3)),
+  value = c(.65, 1, .79,
+            .53, .93, .68,
+            .73, .96, .83,
+            .57, .82, .67)
+)
+
+ggplot(results) +
+  geom_bar(aes(x = value,
+               y = measure,
+               fill = model),
+           stat = "identity",
+           position = "dodge") +
+  facet_wrap(~ type,
+             ncol = 1) +
+  labs(x = "",
+       y = "",
+       fill = "") +
+  theme_minimal() +
+  theme(text = element_text(size = 15),
+        legend.position = "bottom")

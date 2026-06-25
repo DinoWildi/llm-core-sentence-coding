@@ -12,7 +12,7 @@ from typing import List, Optional, Literal
 
 ## Loading data ##
 # current dataset: UK newspaper data
-fp = Path("/pfs/data6/home/hd/hd_hd/hd_gn354/projects/llm-coding/data")
+fp = Path("../../data")
 df_uk = read_tabular(fp / "UK_texts.csv")
 input = df_uk['contexted']
 
@@ -22,8 +22,6 @@ GPTSMALL = 'gpt-oss:20b'
 GPTLARGE = 'gpt-oss:120b'
 GEMMA = 'gemma4:31b-cloud'
 ollama.pull(GEMMA)
-
-client = ollama.Client()
 
 def classify_text(text, system_message, model):
 
@@ -236,8 +234,11 @@ Input 5: Starmer and other European leaders have been repeatedly chastised and b
 Output 5:
 {json.loads(ex_5)}
 '''
+client = ollama.Client()
+print("Ollama client loaded. Beginning inference now.")
 
 out = []
+ctrl = 0
 
 for text in input:
     messages = [
@@ -258,5 +259,8 @@ for text in input:
     )
     
     out.append(response)
+    
+    ctrl = ctrl + 1
+    print(f"{ctrl} texts analyzed and saved")
 
 transform_and_save(out, "output_fewshot_gemma.json")

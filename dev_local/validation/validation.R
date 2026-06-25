@@ -27,7 +27,7 @@ json_transform <- function(data) {
   
 }
 
-results <- fromJSON(path("../../output/output_baseline_gpt-oss_120b.json")) 
+results <- fromJSON(path(Is "../../output/output_cb_gemma.json")) 
 results <- json_transform(results)
 
 # Harmonizing colnames and merge to long frame
@@ -130,21 +130,25 @@ reshaper <- function(data, varcol){
   return(out)
 }
 
-f1 <- function(data, varcol, truecol = "true", evalcol = "llm", na.rm = T, output = "f1"){
+f1 <- function(data, varcol = "NULL", truecol = "true", evalcol = "llm", na.rm = T, output = "f1"){
   out <- data %>% 
     mutate(across(c(.data[[truecol]], .data[[evalcol]]),
-                  ~ if_else(is.na(.x), 0, .x))) %>% 
-    group_by(id, .data[[varcol]]) %>% 
+                  ~ if_else(is.na(.x), 0, .x)))
+  
+  if(varcol != "NULL") out <- group_by(out, id, .data[[varcol]])
+  if(varcol == "NULL") out <- group_by(out, id)
+    
+  out <- out %>% 
     mutate(TP = if_else(.data[[evalcol]] <= .data[[truecol]], .data[[evalcol]], .data[[truecol]]),
            FP = max(.data[[evalcol]]-.data[[truecol]], 0),
            FN = max(.data[[truecol]]-.data[[evalcol]], 0)) %>%
     ungroup()
   
-  if(na.rm == T) out <- filter(out, !is.na(.data[[varcol]]))
+  if(na.rm == T & varcol != "NULL") out <- filter(out, !is.na(.data[[varcol]]))
   
+  if(varcol != "NULL") out <- group_by(out, .data[[varcol]])
    
    out_f1 <- out %>% 
-    group_by(.data[[varcol]]) %>% 
     summarise(across(TP:FN,
                      ~ sum(.x))) %>% 
     mutate(f1 = (2*TP)/(2*TP + FP + FN)) %>% 
@@ -175,6 +179,7 @@ binary_eval <- function(long, target){
   return(out)
 }
 
+binary_eval(long, "f1")
 
 # Type among detected CS
 type_cs <- reshaper(long, "type")
@@ -193,7 +198,7 @@ dir_f1 <- f1(dir, "direction")
 
 subj <- filter(long, !is.na(subject)) %>% 
   reshaper("subject")
-
+sf <- f1(subj, "subject")
 
 
 #### Merging for paper ####
