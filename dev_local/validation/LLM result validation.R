@@ -167,7 +167,7 @@ validation <- mutate(validation, issue_lv1 = if_else(
   
 #### Load LLM output ####
 gemma <- json_transform(path(
-  "C:/Users/dino1/Documents/GitHub/llm-core-sentence-coding/output/output_cb_gemma.json")) %>% 
+  "C:/Users/dino1/Documents/GitHub/llm-core-sentence-coding/output/output_step_pipe_gemma.json")) %>% 
   id_match() %>% 
   arrange(id)
 

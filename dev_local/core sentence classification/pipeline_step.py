@@ -14,7 +14,7 @@ from typing import List, Optional, Literal
 # current dataset: UK newspaper data
 fp = Path("../../data")
 df_uk = read_tabular(fp / "UK_texts.csv")
-input = df_uk['contexted'][0:10]
+input = df_uk['contexted']
 
 ## Pydantic setup
 
@@ -361,8 +361,10 @@ You will be given up to five sentences from a British newspaper article publishe
 
 ## Output format
 
-Return only the relations you identify in the marked sentence. Return relations in the following format: "actor" / "target" / "issue relation". Return all relations in the sentence. If you do not find any relations, return "No claims made".
+Return only the relations you identify in the marked sentence. Return relations in the following format: "actor" / "target" / "issue relation". Omit the direction. Return all relations in the sentence. If there are multiple relations in one sentence, separate them by semicolons. If you do not find any relations, return "No claims made".
 '''
+
+
 
 
 ## Inference ##
@@ -375,12 +377,71 @@ client = ollama.Client()
 print("Ollama client loaded. Beginning inference now.")
 
 out = []
-ctr = 1
+ctr = 0
 
 for text in input:
     messages = [
-        {role: "system", "content": rel_sysprompt},
-        {role: "user", "content": text}
+        {"role": "system", "content": rel_sysprompt},
+        {"role": "user", "content": text}
+    ]
+
+    opts = {
+        "seed": 42,
+        "temperature": 0.0
+    }
+
+    rels = client.chat(
+        model = GEMMA_CLOUD,
+        messages = messages,
+        options = opts
+    )
+
+    relations = rels.message["content"]
+
+    prompt_2 = f'''Text: {text}
+
+    Detected relations: {relations}
+
+    Code the provided text according to the instructions you were given, and return the specified JSON dictionary. Return nothing else.
+    '''
+
+    codinginstructions = f'''
+        You will be given a sentence from a British newspaper, in which the following relations have been identified: {relations}.
+
+        Individual relations are separated by semicolons. For each relation, follow these steps:
+
+        1) Identify whether the relation is a claim made by or towards a national British political actor. If it does not involve a political actor, or only international actors, skip the relation. If it involves at least one national British political actor, continue to step 2. 
+
+        2) Identify the type of the relation according to the following instructions:
+
+        {types}
+
+        3) Identify the issue category, using the following instructions and categories:
+
+        {issue_cats}
+
+        4) Identify the subject and object, and direction in relation to the issue category detected, according to the following codebook:
+
+        {corevars}
+
+        ## Input format
+
+        You will be given up to five sentences from a British newspaper article published between November 2025 and February 2026. One sentence is marked with > <. Code only the marked sentence, and use the rest of the text as context.
+
+        You are given the relations identified in the marked sentence labelled as "Detected relations:". Relations are given in the following format: "actor" / "target" / "issue relation". Individual relations are separated by semicolons. If there are no relations, you will be given the text "No claims made".
+
+        ## Output format
+
+        Return a JSON dictionary using the following structure:
+
+        {response_scheme}
+
+        Do not wrap in Markdown, and return nothing else.
+        '''
+
+    messages = [
+        {"role": "system", "content": codinginstructions},
+        {"role": "user", "content": prompt_2}
     ]
 
     opts = {
@@ -389,7 +450,7 @@ for text in input:
     }
 
     response = client.chat(
-        model = modelname,
+        model = GEMMA_CLOUD,
         messages = messages,
         options = opts
     )
@@ -399,4 +460,4 @@ for text in input:
 
     out.append(response)
 
-print(out)
+transform_and_save(out, "output_cb_gemma.json")
