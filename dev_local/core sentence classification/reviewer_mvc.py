@@ -14,7 +14,7 @@ from typing import List, Optional, Literal
 # current dataset: UK newspaper data
 fp = Path("../../data")
 df_uk = read_tabular(fp / "UK_texts.csv")
-input = df_uk['contexted'][0:10]
+input = df_uk['contexted']
 
 ## Pydantic setup
 

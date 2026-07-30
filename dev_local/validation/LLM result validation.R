@@ -202,3 +202,50 @@ var_eval(validation, gemma, issue_lv1, issue_cat)
 var_eval(validation, gpt, sub_org, subject_organisation)
 var_eval(validation, gpt, obj_org, object_organisation)
 var_eval(validation, gpt, issue_lv1, issue_cat)
+
+
+#### Reviewer architecture ####
+#### 
+raw_gemma <- json_transform(path(
+  "C:/Users/dino1/Documents/GitHub/llm-core-sentence-coding/output/reviewer_test_initial.json")) %>% 
+  id_match() %>% 
+  arrange(id)
+
+raw_gemma <- mutate(raw_gemma, subject_organisation = case_when(
+    subject_organisation == "Labour Party" ~ "Labour",
+    subject_organisation == "Independent/Expert" ~ "Experts or scientists (unaffiliated)",
+    subject_organisation == "Energy Industry" ~ "Energy sector",
+    TRUE ~ subject_organisation),
+  object_organisation = case_when(
+    object_organisation == "Labour Party" ~ "Labour",
+    object_organisation == "Independent/Expert" ~ "Experts or scientists (unaffiliated)",
+    object_organisation == "Energy Industry" ~ "Energy sector",
+    TRUE ~ object_organisation
+  )
+)
+
+gemma_reviewed <- mutate(gemma_reviewed, subject_organisation = case_when(
+  subject_organisation == "Labour Party" ~ "Labour",
+  subject_organisation == "Independent/Expert" ~ "Experts or scientists (unaffiliated)",
+  subject_organisation == "Energy Industry" ~ "Energy sector",
+  TRUE ~ subject_organisation),
+  object_organisation = case_when(
+    object_organisation == "Labour Party" ~ "Labour",
+    object_organisation == "Independent/Expert" ~ "Experts or scientists (unaffiliated)",
+    object_organisation == "Energy Industry" ~ "Energy sector",
+    TRUE ~ object_organisation
+  )
+)
+
+nr_eval(validation, raw_gemma)
+nr_eval(validation, gemma_reviewed)
+
+var_eval(validation, raw_gemma, sub_org, subject_organisation)
+var_eval(validation, raw_gemma, obj_org, object_organisation)
+var_eval(validation, raw_gemma, issue_lv1, issue_cat)
+var_eval(validation, raw_gemma, dir, direction)
+
+var_eval(validation, gemma_reviewed, sub_org, subject_organisation)
+var_eval(validation, gemma_reviewed, obj_org, object_organisation)
+var_eval(validation, gemma_reviewed, issue_lv1, issue_cat)
+var_eval(validation, gemma_reviewed, dir, direction)
