@@ -373,7 +373,7 @@ Return a JSON dictionary using the following structure:
 
 {response_scheme}
 
-Do not wrap in Markdown, and return nothing else.
+Do not wrap in a code block. Return nothing else.
 '''
 
 ## Reviewer prompt setup ##
@@ -398,7 +398,13 @@ You will be given the original text in the same format it has been given to the 
 
 ## Output Format
 
-Return a JSON dictionary using the same structure the coder was instructed to use, with any corrections you have made. If you have removed a core sentence, do not include it in the output. If you have deleted all core sentences, return the "sentence" field and return an empty list of core sentences.
+## Output Format
+
+Return a JSON dictionary with your revised coding, using the following structure:
+
+{response_scheme}
+
+Do not wrap in a code block. Return nothing else.
 '''
 
 ## Inference ##

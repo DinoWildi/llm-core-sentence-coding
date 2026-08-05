@@ -281,9 +281,9 @@ issue_cats = [
       "Category": "INTERNATIONAL COOPERATION",
       "Definition": "References to international agreements, trade, and the international aspects of climate and energy.",
       "Clarification": "Cooperation is understood broadly to include all international interactions, including international trade, migration, and references to international solidarity. Use INTERNATIONAL COOPERATION also for stances taken on more or less global interdependence in climate-related matters, such as energy imports.",
-      "Negative Clarification": "Code only instances where the cooperation is relevant to national politics, e.g. by involving a national political actor. Do not code instances where the international cooperation is not related to climate or energy.",
-      "Positive Example": "\"The President highlighted the role French nuclear power can play in making Europe less dependent on Russian gas and oil\". Dependency on Russia is an issue of international affairs, and the President is emphasising the international dimension of the issue.",
-      "Negative Example": "\"Merz reacted angrily to Trump's blockade of the Strait of Hormuz\". While the issue referenced is affecting energy prices, it is not explicitly related to climate change or fossil fuels. Do not code."
+      "Negative Clarification": "Code only instances where the cooperation is relevant to national politics, e.g. by involving a national political actor. Do not code instances where the international cooperation is not related to climate or energy. Issues framed as national security issues are coded as SECURITY.",
+      "Positive Example":  "\"The German Greens demand that the asylum laws are adapted to account for increased climate migration from dry regions in Africa\". Migration is an international issue, and it is related to climate in this case.",
+      "Negative Example": "\"The President highlighted the role French nuclear power can play in making Europe less dependent on Russian gas and oil\". Dependency on Russian oil and gas is a question of national security. Use SECURITY."
     },
     {
       "Category": "CONSTRUCTION",
@@ -340,8 +340,16 @@ issue_cats = [
       "Negative Clarification": "Do not code harms to nature that are not related to climate change. If the focus of the sentence is on harms to humans, use other categories where possible.",
       "Positive Example": "\"The town's mayor opposed the wind farm, fearing it would disturb local rare bird populations\". The reference to bird populations is a non-climate claim that is related to climate action by the wind farm.",
       "Negative Example": "\"Experts urged for tighter water use rules during droughts to prevent the risk of forest fires threatening the community\". The focus is on forest fires as a threat to humans. Use EXTREME WEATHER PROTECTION."
+    },
+    {
+      "Category": "SECURITY",
+      "Definition": "References to protection against national and international security threats, either direct or indirect.",
+      "Clarification": "Security refers to both direct responses to other countries' actions, as well as preventive action against potential threats to the population (e.g. energy diversification). Use SECURITY for general questions of energy security.",
+      "Negative Clarification": "Security risks focus on man-made (political) and energy security threats, not threats by natural events. For protection against natural risks, use EXTREME WEATHER PROTECTION.",
+      "Positive Example": "\"The government hopes that its renewable energy initiative will reduce dependency on Russian gas\". Reducing dependency on foreign energy sources is a preventative measure against a human security threat.",
+      "Negative Example": "\"We are developing new early warning systems to protect the villages against the threat of flooding\". While the sentence speaks about protection from threats, the threat is a natural disaster risk. Use EXTREME WEATHER PROTECTION."
     }
-]
+  ]
 
 sysprompt = f'''
 You are an expert coder of political content in newspaper texts. You have a strong knowledge of British politics and know the relevant actors in the UK in 2025/26.
