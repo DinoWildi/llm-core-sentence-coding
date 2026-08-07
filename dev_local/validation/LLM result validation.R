@@ -156,7 +156,7 @@ validation <- mutate(validation, obj_org = case_when(
 ))
 
 validation <- mutate(validation, issue_lv1 = if_else(
-  issue_lv2 == "lowering energy costs", "compensation", issue_lv1
+  issue_lv2 == "lowering energy costs", "COMPENSATION", issue_lv1
 ))
 
 validation <- mutate(validation, issue_lv1 = if_else(
@@ -166,43 +166,58 @@ validation <- mutate(validation, issue_lv1 = if_else(
 ))
   
 #### Load LLM output ####
-gemma <- json_transform(path(
-  "C:/Users/dino1/Documents/GitHub/llm-core-sentence-coding/output/output_step_pipe_gemma.json")) %>% 
+initial <- json_transform(path(
+  "C:/Users/dino1/Documents/GitHub/llm-core-sentence-coding/output/reviewer_test_initial_gemma.json")) %>% 
   id_match() %>% 
   arrange(id)
 
-gemma <- mutate(gemma, subject_organisation = case_when(
+initial <- mutate(initial, subject_organisation = case_when(
   subject_organisation == "Labour Party" ~ "Labour",
   subject_organisation == "Independent/Expert" ~ "Experts or scientists (unaffiliated)",
   subject_organisation == "Energy Industry" ~ "Energy sector",
   TRUE ~ subject_organisation
 ))
-gemma <- mutate(gemma, object_organisation = case_when(
+initial <- mutate(initial, object_organisation = case_when(
   object_organisation == "Labour Party" ~ "Labour",
   object_organisation == "Independent/Expert" ~ "Experts or scientists (unaffiliated)",
   object_organisation == "Energy Industry" ~ "Energy sector",
   TRUE ~ object_organisation
 ))
 
-gpt <- json_transform(path(
-  "C:/Users/dino1/Documents/GitHub/llm-core-sentence-coding/output/output_cb_gptlarge_2.json")) %>% 
+reviewed <- json_transform(path(
+  "C:/Users/dino1/Documents/GitHub/llm-core-sentence-coding/output/reviewer_test_gemma_gpt.json")) %>% 
   id_match() %>% 
   arrange(id)
 
+reviewed <- mutate(reviewed, subject_organisation = case_when(
+  subject_organisation == "Labour Party" ~ "Labour",
+  subject_organisation == "Independent/Expert" ~ "Experts or scientists (unaffiliated)",
+  subject_organisation == "Energy Industry" ~ "Energy sector",
+  TRUE ~ subject_organisation
+))
+reviewed <- mutate(reviewed, object_organisation = case_when(
+  object_organisation == "Labour Party" ~ "Labour",
+  object_organisation == "Independent/Expert" ~ "Experts or scientists (unaffiliated)",
+  object_organisation == "Energy Industry" ~ "Energy sector",
+  TRUE ~ object_organisation
+))
+
 #### F1 for numbers ####
 
-nr_eval(validation, gemma)
+nr_eval(validation, initial)
+nr_eval(validation, reviewed)
 
 #### CS Variables ####
 
-var_eval(validation, gemma, sub_org, subject_organisation)
-var_eval(validation, gemma, obj_org, object_organisation)
-var_eval(validation, gemma, issue_lv1, issue_cat)
+var_eval(validation, initial, sub_org, subject_organisation)
+var_eval(validation, initial, obj_org, object_organisation)
+var_eval(validation, initial, issue_lv1, issue_cat)
+var_eval(validation, initial, dir, direction)
 
-var_eval(validation, gpt, sub_org, subject_organisation)
-var_eval(validation, gpt, obj_org, object_organisation)
-var_eval(validation, gpt, issue_lv1, issue_cat)
-
+var_eval(validation, reviewed, sub_org, subject_organisation)
+var_eval(validation, reviewed, obj_org, object_organisation)
+var_eval(validation, reviewed, issue_lv1, issue_cat)
+var_eval(validation, reviewed, dir, direction)
 
 #### Reviewer architecture ####
 #### 

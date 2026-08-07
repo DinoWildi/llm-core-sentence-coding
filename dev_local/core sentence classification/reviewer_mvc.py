@@ -46,22 +46,32 @@ def transform_and_save(raw_outputs: List[dict], output_file: str = "llm_outputs.
         output_file: Path to the output JSON file.
     """
     validated_outputs = []
+    errorlog = []
 
     for raw in raw_outputs:
+        content = raw.get("message", {}).get("content", "{}")
         try:
             # Extract the content from the Ollama response
-            content = raw.get("message", {}).get("content", "{}")
             parsed = json.loads(content)
             # Validate and parse using Pydantic
             validated = CSResponse(**parsed)
             validated_outputs.append(validated.model_dump())
-        except (ValidationError, json.JSONDecodeError, AttributeError) as e:
-            print(f"Skipping invalid response: {raw}. Error: {e}")
+        except (ValidationError, AttributeError) as e:
+            errormsg = (f"Validation error for content: {content}\nError: {e}\n---\n")
+            errorlog.append(errormsg)
+            continue
+        except json.JSONDecodeError as e:
+            errormsg = (f"No valid JSON detected in content: {content}\nError: {e}\n---\n")
+            errorlog.append(errormsg)
             continue
 
-    # Save to JSON file
+    # Save validated outputs to JSON file
     with open(output_file, "w", encoding="utf-8") as f:
         json.dump(validated_outputs, f, indent=2, ensure_ascii=False)
+
+    # Save error log to errorlog.txt
+    with open("errorlog.txt", "w", encoding="utf-8") as f:
+        f.writelines(errorlog)
 
     print(f"Successfully saved {len(validated_outputs)} validated outputs to {output_file}.")
 
@@ -394,17 +404,15 @@ Check carefully for the following things:
 
 ## Input Format
 
-You will be given the original text in the same format it has been given to the coder, as well as the original coded claims in JSON format.
+You will be given the original text in the same format it has been given to the coder, as well as the original coded core sentences in JSON format.
 
 ## Output Format
 
-## Output Format
-
-Return a JSON dictionary with your revised coding, using the following structure:
+Return your results in a JSON dictionary using the following structure:
 
 {response_scheme}
 
-Do not wrap in a code block. Return nothing else.
+Return only the codes you have determined in the same format you received them. Do not return the JSON schema. Do not wrap in a code block. Return nothing else.
 '''
 
 ## Inference ##
@@ -415,7 +423,7 @@ GEMMA_CLOUD = 'gemma4:31b-cloud'
 QWEN = 'qwen3.5:cloud'
 
 modelname = GEMMA_CLOUD
-reviewer = GEMMA_CLOUD
+reviewer = GPTCLOUD
 
 ollama.pull(modelname)
 
@@ -425,7 +433,7 @@ print("Ollama client loaded. Beginning inference now.")
 # Full codebook prompt
 out = []
 initial = []
-ctr = 1
+ctr = 0
 
 for text in input:
     messages = [
@@ -452,8 +460,8 @@ for text in input:
     rev_msg = [
         {"role": "system", "content": sys_rev},
         {"role": "user", "content": f'''
-            Original text: {text}
-            Original coded claims: {codes}
+            Text: {text}
+            Detected core sentences: {codes}
             '''}
     ]
 
