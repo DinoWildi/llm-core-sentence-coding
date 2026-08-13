@@ -12,9 +12,9 @@ from typing import List, Optional, Literal
 
 ## Loading data ##
 # current dataset: UK newspaper data
-fp = Path("../../data")
+fp = Path("/pfs/data6/home/hd/hd_hd/hd_gn354/projects/llm-coding/data")
 df_uk = read_tabular(fp / "UK_texts.csv")
-input = df_uk['contexted'][0:3]
+input = df_uk['contexted']
 
 ## Pydantic setup
 
@@ -416,17 +416,15 @@ Return only the codes you have determined in the same format you received them. 
 '''
 
 ## Inference ##
-GPTSMALL = 'gpt-oss:20b'
-GPTLARGE = 'gpt-oss:120b'
-GPTCLOUD = 'gpt-oss:120b-cloud'
-GEMMA_CLOUD = 'gemma4:31b-cloud'
-QWEN = 'qwen3.5:cloud'
-GEMMA = 'gemma4:31b'
 
-modelname = GEMMA
+GEMMA = 'gemma4:31b'
+QWEN = 'qwen3.5:122b'
+GPT = 'gpt-oss:120b'
+MISTRAL = 'mistral-medium-3.5:128b'
+
+modelname = GEMMA  
 reviewer = GEMMA
 
-print(f"Pulling model {modelname}")
 ollama.pull(modelname)
 
 client = ollama.Client()
