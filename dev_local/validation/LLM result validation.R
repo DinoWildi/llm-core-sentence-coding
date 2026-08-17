@@ -142,16 +142,17 @@ load(path("../../data/LLM Validation.RData"))
 #Minor cleaning
 
 validation <- mutate(validation, sub_org = case_when(
-  sub_org %in% c("Labour Party (UK)", "Labour") ~ "Labour",
+  sub_org %in% c("Labour Party (UK)", "Labour") ~ "Labour Party",
   sub_org %in% c("E3G Thinktank", "E3G Thinkthank") ~ "E3G",
-  sub_org == "Experts or scientists (unaffiliated" ~ "Experts or scientists (unaffiliated)",
+  sub_org == "Experts or scientists (unaffiliated" ~ "Independent experts",
+  sub_org == "Individual businesspeople" ~ "Independent business interest",
   sub_org == "BP Plc / British Petrolium" ~ "BP",
   TRUE ~ sub_org
 ))
 
 validation <- mutate(validation, obj_org = case_when(
   obj_org %in% c("Conservative party (Tories)", "Tories") ~ "Conservative Party",
-  obj_org == "Labour Party (UK)" ~ "Labour",
+  obj_org == "Labour Party (UK)" ~ "Labour Party",
   TRUE ~ obj_org
 ))
 
@@ -172,14 +173,14 @@ initial <- json_transform(path(
   arrange(id)
 
 initial <- mutate(initial, subject_organisation = case_when(
-  subject_organisation == "Labour Party" ~ "Labour",
-  subject_organisation == "Independent/Expert" ~ "Experts or scientists (unaffiliated)",
+  subject_organisation == "Labour Party" ~ "Labour Party",
+  subject_organisation == "Independent/Expert" ~ "Independent experts",
   subject_organisation == "Energy Industry" ~ "Energy sector",
   TRUE ~ subject_organisation
 ))
 initial <- mutate(initial, object_organisation = case_when(
   object_organisation == "Labour Party" ~ "Labour",
-  object_organisation == "Independent/Expert" ~ "Experts or scientists (unaffiliated)",
+  object_organisation == "Independent/Expert" ~ "Independent experts",
   object_organisation == "Energy Industry" ~ "Energy sector",
   TRUE ~ object_organisation
 ))
@@ -190,34 +191,44 @@ reviewed <- json_transform(path(
   arrange(id)
 
 reviewed <- mutate(reviewed, subject_organisation = case_when(
-  subject_organisation == "Labour Party" ~ "Labour",
-  subject_organisation == "Independent/Expert" ~ "Experts or scientists (unaffiliated)",
+  subject_organisation == "Independent/Expert" ~ "Independent experts",
   subject_organisation == "Energy Industry" ~ "Energy sector",
   TRUE ~ subject_organisation
 ))
 reviewed <- mutate(reviewed, object_organisation = case_when(
-  object_organisation == "Labour Party" ~ "Labour",
-  object_organisation == "Independent/Expert" ~ "Experts or scientists (unaffiliated)",
+  object_organisation == "Independent/Expert" ~ "Independent experts",
   object_organisation == "Energy Industry" ~ "Energy sector",
   TRUE ~ object_organisation
 ))
+
+entity <- json_transform(path(
+  "C:/Users/dino1/Documents/GitHub/llm-core-sentence-coding/output/test_entity.json")) |> 
+  id_match() |> 
+  arrange(id)
 
 #### F1 for numbers ####
 
 nr_eval(validation, initial)
 nr_eval(validation, reviewed)
+nr_eval(validation, entity)
 
 #### CS Variables ####
 
 var_eval(validation, initial, sub_org, subject_organisation)
-var_eval(validation, initial, obj_org, object_organisation)
-var_eval(validation, initial, issue_lv1, issue_cat)
-var_eval(validation, initial, dir, direction)
-
 var_eval(validation, reviewed, sub_org, subject_organisation)
+var_eval(validation, entity, sub_org, subject_organisation)
+
+var_eval(validation, initial, obj_org, object_organisation)
 var_eval(validation, reviewed, obj_org, object_organisation)
+var_eval(validation, entity, obj_org, object_organisation)
+
+var_eval(validation, initial, issue_lv1, issue_cat)
 var_eval(validation, reviewed, issue_lv1, issue_cat)
+var_eval(validation, entity, issue_lv1, issue_cat)
+
+var_eval(validation, initial, dir, direction)
 var_eval(validation, reviewed, dir, direction)
+var_eval(validation, entity, dir, direction)
 
 #### Reviewer architecture ####
 #### 
