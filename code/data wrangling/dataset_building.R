@@ -16,8 +16,7 @@ uk_sent <- corpus_reshape(uk_c, to = "sentences", docvars = T) %>%
 
 uk_sent <- uk_sent %>% 
   mutate(text = str_remove_all(text, "^\\W+")) %>% 
-  filter(str_detect(text, "\\d{1,2}.\\d{2}[a|p]m") == F) %>%  #removes timestamps in live articles
-  mutate(text = str_remove_all(text, "\\.$"))
+  filter(str_detect(text, "\\d{1,2}.\\d{2}[a|p]m") == F) #removes timestamps in live articles
   
 # compute context window: -3 / +1
 uk_sent <- uk_sent %>%

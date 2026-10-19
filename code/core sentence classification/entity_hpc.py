@@ -12,12 +12,78 @@ from typing import List, Optional, Literal
 
 ## Loading data ##
 # current dataset: UK newspaper data
-fp = Path("../../data")
-df_uk = read_tabular(fp / "UK_texts.csv")
-input = df_uk['contexted'][0:3]
+#fp = Path("/pfs/data6/home/hd/hd_hd/hd_gn354/projects/llm-coding/data")
+fp = Path("../../data") #For local testing only
+df_uk = read_tabular(fp / "uk_sentences.csv")
+max = len(df_uk['contexted'])
+input = df_uk['contexted'][232:max] 
 
-## Pydantic setup
+## Utility Functions ##
 
+def inference(sysprompt, userprompt, model, options, format, client):
+
+    message = [
+        {"role": "system", "content": sysprompt},
+        {"role": "user", "content": userprompt}
+    ]
+
+    response = client.chat(model = model, 
+                           messages = message, 
+                           options = options,
+                           format = format)
+
+    out = response.get("message", {}).get("content", "{}")
+
+    return out
+
+def flattening(raw_out):
+    flattened_list = []
+    for item in raw_out:
+        if item.strip():  # Skip empty strings (if any)
+            parsed = json.loads(item)
+            flattened_list.extend(parsed)
+
+    return flattened_list
+
+## Pydantic models ##
+
+## Model for entity extraction
+class Entity(BaseModel):
+    verbatim: Optional[str] = Field(None, description = "The entity as it is referenced in the text")
+    organisation: Optional[str] = Field(None, description = "The organisation the subject belongs to")
+    individual: Optional[str] = Field(None, description = "The individual mentioned in the text")
+
+entity_json_schema = Entity.model_json_schema()
+class CSRaw(BaseModel):
+    subject_verbatim: str = Field(..., description="The subject as it appears in the text.")
+    subject_organisation: str = Field(..., description="The subject's organisation.")
+    subject_individual: str = Field(..., description="The subject individual.")
+    type: Literal["actor-actor", "actor-issue"] = Field(..., description="The type of the relation.")
+    direction: Literal["support", "opposition", "ambiguous"] = Field(..., description="The identified direction.")
+    object_verbatim: Optional[str] = Field(
+        default = None, 
+        description="If type is 'actor-actor', the target as it appears in the text. Blank if type is 'actor-issue'."
+        )
+    object_organisation: Optional[str] = Field(
+        default=None,
+        description="If type is 'actor-actor', the organisation the object is affiliated with. Blank if type is 'actor-issue'."
+    )
+    object_individual: Optional[str] = Field(
+        default=None,
+        description="If type is 'actor-actor', the individual the claim is targeted at. Blank if type is 'actor-issue'."
+    )
+    issue_verbatim: Optional[str] = Field(
+        default=None,
+        description="An issue being referenced or targeted, as it appears in the text."
+    )
+    issue_category: Optional[str] = Field(
+        default=None,
+        description="The category of issue being referenced or targeted, according to the coding scheme."
+    )
+
+cs_raw_schema = CSRaw.model_json_schema()
+
+## Final core sentence  model
 class CoreSent(BaseModel):
     type: Literal['actor-actor', 'actor-issue', 'NA'] = Field(..., description = "The category of core sentence detected")
     subject: str = Field(..., description="The subject as it appears in the core sentence")
@@ -35,47 +101,9 @@ class CSResponse(BaseModel):
         description="List of core sentences extracted from the sentence. Leave empty if none are detected."
     )
 
-response_scheme = CSResponse.model_json_schema()
+final_schema = CSResponse.model_json_schema()
 
-def transform_and_save(raw_outputs: List[dict], output_file: str = "llm_outputs.json") -> None:
-    """
-    Transforms raw Ollama outputs into validated CSResponse objects and saves them as a JSON file.
-
-    Args:
-        raw_outputs: List of raw responses from Ollama (e.g., your `out` list).
-        output_file: Path to the output JSON file.
-    """
-    validated_outputs = []
-    errorlog = []
-
-    for raw in raw_outputs:
-        content = raw.get("message", {}).get("content", "{}")
-        try:
-            # Extract the content from the Ollama response
-            parsed = json.loads(content)
-            # Validate and parse using Pydantic
-            validated = CSResponse(**parsed)
-            validated_outputs.append(validated.model_dump())
-        except (ValidationError, AttributeError) as e:
-            errormsg = (f"Validation error for content: {content}\nError: {e}\n---\n")
-            errorlog.append(errormsg)
-            continue
-        except json.JSONDecodeError as e:
-            errormsg = (f"No valid JSON detected in content: {content}\nError: {e}\n---\n")
-            errorlog.append(errormsg)
-            continue
-
-    # Save validated outputs to JSON file
-    with open(output_file, "w", encoding="utf-8") as f:
-        json.dump(validated_outputs, f, indent=2, ensure_ascii=False)
-
-    # Save error log to errorlog.txt
-    with open("errorlog.txt", "w", encoding="utf-8") as f:
-        f.writelines(errorlog)
-
-    print(f"Successfully saved {len(validated_outputs)} validated outputs to {output_file}.")
-
-## Prompts
+## Codebook sections
 
 cs_instructions = [
     {
@@ -128,57 +156,6 @@ types = [
         "Negative Clarification": "Generic references to a person's political qualities, such as criticising someone's honesty, do not constitute actor-issue relations even when an issue is mentioned or known to you from background information. Only use this category if the sentence explicitly states a position (including ambivalence) towards an issue.",
         "Positive Example": "\"Giorgia Meloni announces her plans to replace Russian gas with American LNG\". The statement shows a clear stance by an actor (Meloni) towards an issue (replacing Russian gas with American LNG).",
         "Negative Example": "\"Greens claim Merz was dishonest about his position on the debt brake.\" While an issue is mentioned, there is no position-taking being mentioned from either side - the claim is about dishonesty. Code as an actor-actor relation."
-    }
-]
-
-corevars = [
-    {
-      "Variable": "subject",
-      "Definition": "The subject of a core sentence is an actor who makes a political claim in the grammatical sentence.",
-      "Clarification": "A subject needs to be a nationally relevant political actor, such as a party, movement, or a civil society actor. Businesses, trade unions, experts, etc. can be actors too if they formulate national political claims. The subject is not necessarily equal to the grammatical subject.",
-      "Negative Clarification": "We do not code subjects where they are foreign actors. For example, Donald Trump pulling out of the Paris Agreement would not be coded as we are not interested in US politics. This also applies to European Union-level institutions, parties, or individual politicians, actors that we only code when they express a position in relation to domestic actors or issues. We do not code non-political actors unless they are making political demands or comment on the actions of political actors.",
-      "Positive Example": "\"Friedrich Merz wants to reduce subsidies for renewable energies\" → \"Friedrich Merz\"",
-      "Negative Example": "\"Volkswagen announced their intentions to phase out production of combustion engine cars by 2040.\" The actor \"Volkswagen\" is not explicitly linking its plans to national politics; therefore, it is not making a political claim. We do not code it as a subject."
-    },
-    {
-      "Variable": "subject_organisation",
-      "Definition": "The organisation (political party, institution, movement, etc.) the actor making a claim is part of or related to.",
-      "Clarification": "Organisations do not need to be actively mentioned to be coded. Use context and background knowledge to determine the organisation. Many actors are part of one or more organisations (political parties, institutions, movements etc.). In this case, prioritise parties or movements, or use the organisation mentioned in the text.",
-      "Negative Clarification": "Do not code past organisational affiliations. For politicians, use party affiliations rather than institutional affiliations wherever possible.",
-      "Positive Example": "\"Le Pen called Macron's climate plan 'the destruction of the French economy'\" → \"Rassemblement National\"",
-      "Negative Example": "\"Chancellor Merz announced his plans to propose a climate fund at the upcoming EU summit\". As we have an individual with a clear party affiliation, the correct code here is not \"German Government\", but \"CDU/CSU\"."
-    },
-    {
-      "Variable": "direction",
-      "Definition": "The position (coded as \"support\", \"opposition\", or \"ambiguous\") that the subject takes towards the issue or object of the core sentence.",
-      "Clarification": "In an actor-actor sentence, the direction refers to how the subject positions itself towards the object. In an actor-issue sentence, the direction refers to how the subject positions itself towards the issue referenced in the sentence. Try to assign a clear direction (i.e. \"support\" or \"opposition\") whenever possible.",
-      "Negative Clarification": "In an actor-actor sentence, disregard the issue when coding direction. Do not use background knowledge for this variable - only code the direction as it appears in the specific sentence in the text.",
-      "Positive Example": "\"Extinction Rebellion protested against the government's plan\" → \"opposition\"",
-      "Negative Example": "\"The Greens voted against the proposed law to subsidise renewables\" → The text mentions opposition of the Greens (\"voted against\"). Code as the Greens opposing renewable subsidies, even if you know they generally support subsidies for renewables."
-    },
-    {
-      "Variable": "object",
-      "Definition": "The object of a core sentence is an organised actor (party, movement, business, etc.) that is the target of a political claim.",
-      "Clarification": "Objects do not necessarily have to be nationally relevant actors. Any organisation or actor that is talked about by a relevant subject is a valid object to be coded, even if it is non-political (e.g. businesses) or from another country.",
-      "Negative Clarification": "Do not code an object in an actor-issue sentence. Objects can only be actors (i.e. people or organisations). Do not code abstract or vague actors (e.g. \"politicians\", \"the industry\").",
-      "Positive Example": "\"Fridays for Future's actions were criticised by PM Starmer in his parliamentary speech\" → \"Fridays for Future\"",
-      "Negative Example": "\"Meloni also emphasised the importance of a secure gas supply for the Italian industry\". The target of this sentence is \"a secure gas supply\", which is an issue rather than an actor. Do not code an object. \"the Italian industry\" is too vague to be considered an object of a core sentence."
-    },
-    {
-      "Variable": "object_organisation",
-      "Definition": "The organisation (political party, institution, movement, etc.) the target of a claim is part of or related to.",
-      "Clarification": "Organisations do not need to be actively mentioned to be coded. Use context and background knowledge to determine the organisation. Many actors are part of one or more organisations (political parties, institutions, movements etc.). In this case, prioritise parties or movements, or use the organisation mentioned in the text.",
-      "Negative Clarification": "Do not code past organisational affiliations. For politicians, use party affiliations rather than institutional affiliations wherever possible.",
-      "Positive Example": "\"Extinction Rebellion blockaded and attacked a Shell office building\" → Shell. Even though Shell is not a political actor, it is the target of a political action.",
-      "Negative Example": "\"Nigel Farage demands an end to the government's 'climate mania'\" → \"UK Government\". Use background knowledge to prioritise party affiliation, rather than coding institutions, where possible - the correct code would be \"Labour Party\"."
-    },
-    {
-      "Variable": "issue",
-      "Definition": "An issue that is being referenced in a core sentence, either directly as the target of the sentence or in relation to the target.",
-      "Clarification": "In actor-issue sentences, the issue is the target of the core sentence, i.e. the thing that a claim is being made about. In actor-actor sentences, an issue can also be referenced as a justification or a reason for the statement. Code both these instances as issues. Issues always need to be coded as a position or action where \"supports\" or \"opposes\" has a clear meaning.",
-      "Negative Clarification": "Do not code issues that are simply mentioned without being connected to the claim. Do not code instances where an actor is simply mentioned in conjunction with an issue, but no claim is being made, such as a simple description of a phenomenon.",
-      "Positive Example": "\"The Romanian Prime Minister announced his plan to create a fund for relief for flood victims\" → \"relieve flood victims\". This is the target of the core sentence. \"Extinction Rebellion protested the government's decision to allow an extension of coal mining\" → \"expanding coal mining\". The target of the sentence is \"the government\", but coal mining is referenced as the reason for opposing the government.",
-      "Negative Example": "\"Meloni says she is preparing a relief package for high fuel costs.\" → \"fuel costs\". It is unclear what this means. Use a clearer directional label such as \"relief for fuel costs\" or \"lowering fuel costs\"."
     }
 ]
 
@@ -291,9 +268,9 @@ issue_cats = [
       "Category": "INTERNATIONAL COOPERATION",
       "Definition": "References to international agreements, trade, and the international aspects of climate and energy.",
       "Clarification": "Cooperation is understood broadly to include all international interactions, including international trade, migration, and references to international solidarity. Use INTERNATIONAL COOPERATION also for stances taken on more or less global interdependence in climate-related matters, such as energy imports.",
-      "Negative Clarification": "Code only instances where the cooperation is relevant to national politics, e.g. by involving a national political actor. Do not code instances where the international cooperation is not related to climate or energy.",
-      "Positive Example": "\"The President highlighted the role French nuclear power can play in making Europe less dependent on Russian gas and oil\". Dependency on Russia is an issue of international affairs, and the President is emphasising the international dimension of the issue.",
-      "Negative Example": "\"Merz reacted angrily to Trump's blockade of the Strait of Hormuz\". While the issue referenced is affecting energy prices, it is not explicitly related to climate change or fossil fuels. Do not code."
+      "Negative Clarification": "Code only instances where the cooperation is relevant to national politics, e.g. by involving a national political actor. Do not code instances where the international cooperation is not related to climate or energy. Issues framed as national security issues are coded as SECURITY.",
+      "Positive Example":  "\"The German Greens demand that the asylum laws are adapted to account for increased climate migration from dry regions in Africa\". Migration is an international issue, and it is related to climate in this case.",
+      "Negative Example": "\"The President highlighted the role French nuclear power can play in making Europe less dependent on Russian gas and oil\". Dependency on Russian oil and gas is a question of national security. Use SECURITY."
     },
     {
       "Category": "CONSTRUCTION",
@@ -350,134 +327,379 @@ issue_cats = [
       "Negative Clarification": "Do not code harms to nature that are not related to climate change. If the focus of the sentence is on harms to humans, use other categories where possible.",
       "Positive Example": "\"The town's mayor opposed the wind farm, fearing it would disturb local rare bird populations\". The reference to bird populations is a non-climate claim that is related to climate action by the wind farm.",
       "Negative Example": "\"Experts urged for tighter water use rules during droughts to prevent the risk of forest fires threatening the community\". The focus is on forest fires as a threat to humans. Use EXTREME WEATHER PROTECTION."
+    },
+    {
+      "Category": "SECURITY",
+      "Definition": "References to protection against national and international security threats, either direct or indirect.",
+      "Clarification": "Security refers to both direct responses to other countries' actions, as well as preventive action against potential threats to the population (e.g. energy diversification). Use SECURITY for general questions of energy security.",
+      "Negative Clarification": "Security risks focus on man-made (political) and energy security threats, not threats by natural events. For protection against natural risks, use EXTREME WEATHER PROTECTION.",
+      "Positive Example": "\"The government hopes that its renewable energy initiative will reduce dependency on Russian gas\". Reducing dependency on foreign energy sources is a preventative measure against a human security threat.",
+      "Negative Example": "\"We are developing new early warning systems to protect the villages against the threat of flooding\". While the sentence speaks about protection from threats, the threat is a natural disaster risk. Use EXTREME WEATHER PROTECTION."
     }
 ]
 
-sysprompt = f'''
-You are an expert coder of political content in newspaper texts. You have a strong knowledge of British politics and know the relevant actors in the UK in 2025/26.
-Your task is to read articles published in British newspapers and identify political claims made by nationally relevant actors, using the codebook below.
-
-## Coding Instructions
-
-A grammatical sentence can contain zero, one, or multiple relations that can be coded as core sentences. Core sentences express a relation between an subject (actor) and a target (either another actor or an issue). Subject and target are linked by a verb expressing some form of action. Code all core sentences you can find in a sentence, using the variables below. Core sentences can appear in multiple ways and patterns:
-
-{cs_instructions}
-
-The following variables are the basic building blocks of a core sentence. Every core sentence always needs a type, a subject, a direction, and at least one of object and/or issue.
-
-The type of core sentence largely depends on the target of the claim being made. Use one of the following two categories:
-{types}
-{corevars}
-issue_category:
-Issue categories group issues further into one of 21 categories. These categories serve as a higher-level aggregation to analyze the climate-related agenda across countries. Use one of the following categories:
-
-{issue_cats}
-
-## Input Format
-
-You will be given up to five sentences from a British newspaper article published between November 2025 and February 2026. One sentence is marked with > <. Code only the marked sentence, and use the rest of the text as context.
-
-## Output Format
-
-Return a JSON dictionary using the following structure:
-
-{response_scheme}
-
-Do not wrap in a code block. Return nothing else.
-'''
-
-## Reviewer prompt setup ##
-
-sys_rev = f'''
-You are a political scientist supervising the coding of political claims in British newspaper texts. A coder has provided you with a set of coded claims from a British newspaper article published between November 2025 and February 2026.
-
-Your task is to review the coded claims and check their accuracy and consistency with the codebook. You should check each individual code for whether it is correct, and change any codes that you deem incorrect. Return a JSON with the corrected codes in the same format as the original codes.
-
-These are the instructions that have been provided to the initial annotator: {sysprompt}.
-
-## Additional instructions
-
-Check carefully for the following things:
-- Check whether either the subject or the object is a nationally relevant actor in the UK. If neither of the two is a nationally relevant actor, the core sentence should be removed.
-- Check whether the issue category is correct. If the issue category is incorrect, change it to the correct one.
-- Check whether the direction is correct in relation to the identified issue category. If it is not, correct the direction. Note that it is possible that the direction is correct in relation to the way the issue is phrased by the subject, but not in relation to the issue category. In this case, change the direction to be consistent with the issue category.
-
-## Input Format
-
-You will be given the original text in the same format it has been given to the coder, as well as the original coded core sentences in JSON format.
-
-## Output Format
-
-Return your results in a JSON dictionary using the following structure:
-
-{response_scheme}
-
-Return only the codes you have determined in the same format you received them. Do not return the JSON schema. Do not wrap in a code block. Return nothing else.
-'''
-
-## Inference ##
-GPTSMALL = 'gpt-oss:20b'
-GPTLARGE = 'gpt-oss:120b'
-GPTCLOUD = 'gpt-oss:120b-cloud'
-GEMMA_CLOUD = 'gemma4:31b-cloud'
-QWEN = 'qwen3.5:cloud'
-GEMMA = 'gemma4:31b'
-
-modelname = GEMMA
-reviewer = GEMMA
-
-print(f"Pulling model {modelname}")
-ollama.pull(modelname)
-
-client = ollama.Client()
-print("Ollama client loaded. Beginning inference now.")
-
-# Full codebook prompt
-out = []
-initial = []
-ctr = 0
-
-for text in input:
-    messages = [
-        {"role": "system", "content": sysprompt},
-        {"role": "user", "content": text}
-    ]
-
-    opts = {
-        "seed": 42,
-        "temperature": 0.0
+dir_codebook = {
+      "Variable": "direction",
+      "Definition": "The position (coded as \"support\", \"opposition\", or \"ambiguous\") that the subject takes towards the issue or object of the core sentence.",
+      "Clarification": "In an actor-actor sentence, the direction refers to how the subject positions itself towards the object. In an actor-issue sentence, the direction refers to how the subject positions itself towards the issue referenced in the sentence. Try to assign a clear direction (i.e. \"support\" or \"opposition\") whenever possible.",
+      "Negative Clarification": "In an actor-actor sentence, disregard the issue when coding direction. Do not use background knowledge for this variable - only code the direction as it appears in the specific sentence in the text.",
+      "Positive Example": "\"Extinction Rebellion protested against the government's plan\" → \"opposition\"",
+      "Negative Example": "\"The Greens voted against the proposed law to subsidise renewables\" → The text mentions opposition of the Greens (\"voted against\"). Code as the Greens opposing renewable subsidies, even if you know they generally support subsidies for renewables."
     }
 
-    response_initial = client.chat(
-        model = modelname,
-        messages = messages,
-        options = opts,
-        format = response_scheme
-    )
+## Prompting
 
-    codes = response_initial.message['content']
+ner_prompt = f'''
+You are an expert annotator for political texts. Your task is to identify political actors and their organisations from articles published in British newspapers between November 2025 and February 2026. Use your background knowledge of British politics in this time period to identify actors and the organisations they are affiliated to.
 
-    initial.append(response_initial)
+## Instructions
 
-    rev_msg = [
-        {"role": "system", "content": sys_rev},
-        {"role": "user", "content": f'''
-            Text: {text}
-            Detected core sentences: {codes}
-            '''}
-    ]
+You will receive a sequence of five sentences from a British newspaper article. One of those sentences is marked with > and <. Focus on the marked sentence, and use the rest of the text as context to help you identify actors that are referred to indirectly. For example, if the marked sentence contains a pronoun, you should use the context to identify the actor that the pronoun refers to. Extract all actors mentioned in the marked sentence that are affiliated with a political party, civil society movement, organised business interest, experts, or other political actors. You should identify and extract any mention of an individual politician, public figure, expert, etc., as well as any mention of organised groups.
 
-    response = client.chat(
-        model = reviewer,
-        messages = rev_msg,
-        options = opts,
-        format = response_scheme
-    )
+## Variables
+
+For each actor detected in the sentence, provide the following information:
+- "verbatim": The actor as it is referenced in the sentence. This can be a pronoun, a name, or a description. If an actor is not referenced explicitly, but is making a statement (e.g. as in "The Prime Minister said: > [statement] <"), write "Implicit". 
+- "organisation": The organisation the actor is affiliated with. If there are multiple possible affiliations, choose the one that is most relevant to the context of the sentence. If the actor is affiliated with the government, choose the party or parties in government. If the actor is not affiliated with an organisation, return "Independent [type of actor], e.g. "Independent expert" for a scientist.
+- "individual": If the actor is an individual, provide their name in the format "[Last Name], [First Name]". If the actor is not an individual, leave this field empty.
+
+## Output Format
+
+Return a JSON list with an entry for each detected actor following this scheme: {entity_json_schema}. 
+
+Return nothing else. Do not include any additional text or explanations. Do not wrap in a code block.
+
+## Example
+
+Input: "Yesterday, the Chancellor of the Exchequer, Rachel Reeves, presented the new budget in Parliament. Chancellor Reeves highlighted the government's commitment to climate action. It has set aside £20 billion for green energy projects. > Reeves faced criticism from the opposition for ignoring the challenges of energy prices for households, something that experts have warned could lead to increased energy poverty. < Reform went further, calling for a complete end to the government's Net Zero policy."
+
+Sentence to analyse: "Reeves faced criticism from the opposition for ignoring the challenges of energy prices for households, something that experts have warned could lead to increased energy poverty."
+
+Output: [{{"verbatim": "Reeves", "organisation": "Labour Party", "individual": "Reeves, Rachel"}}, {{"verbatim": "the opposition", "organisation": "Conservative Party", "individual": ""}}, {{"verbatim": "experts", "organisation": "Independent experts", "individual": ""}}]
+'''
+
+coresents_prompt = f'''
+You are an expert annotator for political texts. Your task is to identify political claims in the form of so-called "core sentences" in articles published in British newspapers. A core sentence is a relation between an actor and a target (another actor or an issue). You will be provided with an actor. Your goal is to identify all claims made by that actor.
+
+## Input
+You will be given a sequence of five sentences from a newspaper article. One of those sentences is marked with > and <. Focus on the marked sentence, and use the rest of the text as context to help you identify political claims made by actors in the marked sentence. You will also be given an actor that has been identified in the sentence. Your task is to only focus on the provided actor, and identify any claims made by that specific actor.
+
+## Instructions
+Carefully read the provided text and identify the provided actor in the marked sentence. Determine which relations are present, using these types of relations as a guideline:
+{cs_instructions}
+Note that not every actor will make a claim. Pay attention to whether the actor is taking a stance or action, or if the sentence only mentions the actor in another role.
+Identify the target(s) of all present claims, and classify each relation using the following categories:
+{types}
+Return the following variables:
+
+## Variables
+- subject_verbatim: The subject as it appears in the text, same as the actor you were passed.
+- subject_organisation: The organisation of the subject, same as the actor organisation as you were passed.
+- subject_individual: The individual making the claim, same as the individual you were passed.
+- target_verbatim: The target of the claim you identified, as it appears in the text.
+- type: The type of relationship that you have identified. Should be one of "actor-actor" or "actor-issue".
+
+## Output
+Return a JSON dictionary with the five variables named above for each claim you detect. Make a new entry for each claim. If there is no claim, return an empty list. Do not wrap in a code block. Do not return anything else.
+'''
+
+target_prompt = f'''
+You are an expert annotator for political texts. Your task is to identify the target of a political claim in articles published in British newspapers. You will be provided with a text and a claim. You will be given the target of this claim as it appears in the text, and your task is to categorise the target.
+
+## Input
+You will be given a sequence of five sentences from a newspaper article. One of those sentences is marked with > and <. Focus on the marked sentence, and use the rest of the text as context to help you identify political claims made by actors in the marked sentence.
+
+You will also be given a relation in the form of a dictionary entry with a variable "subject_verbatim", "target_verbatim", and "type". Your task is to analyse the relationship between the subject and target, depending on the value of "type". Use the instructions below.
+
+## Instructions for Actors
+If the value of the "type" variable is "actor-actor", the target of the relation is a political actor. In this case, identify the actor in the text using the "target_verbatim" value, and use the context as well as your background knowledge about British politics to return the following information about the target actor:
+- "target_verbatim": The actor as it is referenced in the sentence, and as you were passed it.
+- "target_organisation": The organisation the target is affiliated with. If there are multiple possible affiliations, choose the one that is most relevant to the context of the sentence. If the actor is affiliated with the government, choose the party or parties in government. If the actor is not affiliated with an organisation, return "Independent [type of actor], e.g. "Independent expert" for a scientist.
+- "target_individual": If the actor is an individual, provide their name in the format "[Last Name], [First Name]". If the actor is not an individual, leave this field empty.
+
+### Example
+Sentence: "Reeves faced criticism from the opposition for ignoring the challenges of energy prices for households, something that experts have warned could lead to increased energy poverty."
+subject_verbatim: "the opposition"
+target_verbatim: "Reeves"
+type: "actor-actor"
+
+Desired output:
+object_verbatim: "Reeves"
+object_organisation: "Labour Party"
+object_individual: "Reeves, Rachel"
+
+## Instructions for Issues
+If the value of the "type" variable is "actor_issue", the target of the relation is an issue. In this case, use the provided context to understand what the issue that is references is about. Then, use the following codebook to choose the most fitting issue category:
+{issue_cats}
+Return the issue as it appears in the text as "issue_verbatim" and the category you have decided on as "issue_category".
+
+### Example
+Sentence: "Reeves faced criticism from the opposition for ignoring the challenges of energy prices for households, something that experts have warned could lead to increased energy poverty."
+subject_verbatim: "the opposition"
+target_verbatim: "the challenges of energy prices for households"
+
+Desired output:
+issue_verbatim: "the challenges of energy prices for households"
+issue_category: "COMPENSATION"
+
+## Output
+
+Return a JSON with the following variables:
+- subject_verbatim: The subject as it appears in the text and as you were passed.
+- subject_organisation: The subject's organisation as you were passed.
+- subject_individual: The subject individual as you were passed.
+- type: The type (one of "actor-actor" or "actor-issue") as you were passed
+- object_verbatim: If the type is "actor-actor", the target as it appears in the text and as you were passed. If the type is "actor-issue", leave blank.
+- object_organisation: If the type is "actor-actor", the organisation the object is affiliated with. If the type is "actor-issue", leave blank.
+- object_individual: If the type is "actor-actor", the individual the claim is targeted at. If the type is "actor-issue", leave blank.
+- issue_verbatim: If the type is "actor-issue", the target as it appears in the text and as you were passed. If the type is "actor-actor", leave blank.
+- issue_category: If the type is "actor-issue", the issue category as you have determined it. If the type is "actor-actor", leave blank.
+
+Return only this JSON. Do not return anything else. Do not wrap in a code block.
+'''
+
+direction_prompt = f'''
+You are a neutral expert annotator for political texts. Your task is to identify the stance of a political actor towards another actor or issue in articles published in British newspapers. You will be provided with a text and a relation within that text. Determine the stance of the actor based on the following instructions:
+
+## Input
+
+You will be given a sequence of five sentences from a newspaper article. One of those sentences is marked with > and <. Focus on the marked sentence, and use the rest of the text as context to help you identify the stance of the actor as expressed in the marked sentence.
+You will be given a dictionary describing a subject and an object or issue extracted from the marked sentence. Use the provided instructions to determine the stance of the subject towards the object or issue.
+
+## Instructions
+
+1. Identify the relevant target variables. If the value for "type" is "actor-actor", the relevant target variables are "object_verbatim" and "object_organisation". If the value for "type" is "actor-issue", the relevant target variables are "issue" and "issue_category".
+2. Identify the actor and target in the sentence. The actor can be found using the "subject_verbatim" field, the target can be found either using the "object_verbatim" or "issue" field, depending on which you have identified as relevant.
+3. Determine the stance of the actor towards the target, using the following codebook: {dir_codebook}. If type = "actor-issue", return the stance relative to the issue category passed in "issue_cat", not the issue as phrased in "issue".
+4. Return the dictionary you were passed and add the determined direction in a new variable called "direction".
+
+Pay attention that you only use information in the text and determine the stance present in the specific sentence. Do NOT use background knowledge about general stances (e.g. if a Labour politician agrees with a Reform politician, code as a supportive stance, even if you know that Labour and Reform usually oppose each other). 
+
+## Output
+
+Return a JSON with the following variables:
+- subject_verbatim: The subject as it appears in the text. Return as passed in the input.
+- subject_organisation: The subject's organisation. Return as passed in the input.
+- subject_individual: The subject individual. Return as passed in the input.
+- type: The type (one of "actor-actor" or "actor-issue") of the relation. Return as passed in the input.
+- direction: The direction you have identified. One of "support", "opposition", "ambiguous".
+- object_verbatim: If the type is "actor-actor", the target as it appears in the text. Blank if the type is "actor-issue". Return as passed in the input.
+- object_organisation: If the type is "actor-actor", the organisation the object is affiliated with. Blank if the type is "actor-issue". Return as passed in the input.
+- object_individual: If the type is "actor-actor", the individual the claim is targeted at. Blank if the type is "actor-issue". Return as passed in the input.
+- issue_verbatim: If the type is "actor-issue", the target issue as it appears in the text. Blank if the type is "actor-actor". Return as passed in the input.
+- issue_category: If the type is "actor-issue", the issue_category as you were passed. Blank if the type is "actor-actor". Return as passed in the input.
+
+**Rules**: 
+- For every field that exists in the input, return the same value as in the input.
+- Do NOT replace a passed value with an empty string or duplicate a field.
+- Return only the JSON, without explanations or code blocks.
+'''
+
+issueref_prompt = f'''
+You are a neutral expert annotator for political texts. Your task is to identify whether a relation between two political actors references a political issue or not. You will be provided with a text and a relation between two actors. Determine whether the relation is between two actors, and if so, determine a potential issue reference using the following instructions. Return your findings in a JSON format.
+
+## Input
+You will be given a sequence of five sentences from a newspaper article. One of those sentences is marked with > and <. Focus on the marked sentence, and use the rest of the text as context to help you identify the issue that is potentially being referenced.
+
+You will be given a relationship between an actor and another actor or an issue in a JSON format.
+
+## Instructions
+If an actor takes a stance towards another actor, they sometimes do this in reference to a specific issue, for example when a politician criticises the government for a specific policy plan. If this is the case, we consider this an **issue reference**. Your task is to identify and classify issue references according to the following steps:
+
+1) Scan the provided text and relation. If the relation type is "actor-issue" and the variables issue_verbatim and issue_category are already filled in, return the JSON as passed to you, and move on. If the relation type is "actor-actor", move on to Step 2.
+2) If the relation type is "actor-actor", and the variables issue_verbatim and issue_category are empty, identify the actors that are present in the relation in the sentence you are provided.
+3) Identify whether the relationship between the provided actors references a specific issue. If this is the case, extract the refrenced issue as it is described in the text and use it as the value for issue_verbatim. Make sure you code issues that are mentioned in relation to the actors provided, and are not just mentioned in the same text coincidentally. Not every sentence will have an issue reference - be critical and only code issue references when they are explicitly linked to the actor-actor relation.
+4) Classify the issue you identified according to one of the following categories: {issue_cats}. Return the category you chose as "issue_category".
+
+## Output
+Return a JSON dictionary with the following schema: {cs_raw_schema}.
+
+Additional rules:
+- Do NOT alter or replace any non-empty fields in the input.
+- Do NOT return anything other than this JSON.
+- Do NOT wrap in code blocks.
+- Do NOT use newline symbols or line breaks within the JSON.
+'''
+
+review_prompt = f'''
+You are a supervisor of an annotation process designed to identify claims of British political actors in newspaper texts. Your task is to critically review the annotations produced by annotation agents, and re-arrange the annotations to the correct format according to the instructions below. Pay attention to only return relevant claims, and keep in mind the annotators may have annotated irrelevant relations.
+
+## Input
+You will be given a sequence of five sentences from a newspaper article that has been given to the annotator. One of those sentences is marked with > and <. Annotators were asked to only annotate the marked sentence, and use the rest of the sequence only for context reference.
+
+You will also be given a dictionary of claims detected by the annotator. These are formatted as so-called "core sentences", containing the following variables:
+- subject_verbatim: The subject as it appears in the text.
+- subject_organisation: The subject's organisation.
+- subject_individual: The subject individual.
+- type: The type (one of "actor-actor" or "actor-issue") of the relation.
+- direction: The direction you have identified. One of "support", "opposition", "ambiguous".
+- object_verbatim: An actor that is targeted in the claim, as it appears in the text. Blank if the type is "actor-issue".
+- object_organisation: The organisation a targeted actor is affiliated with. Blank if the type is "actor-issue".
+- object_individual: The individual actor the claim is targeted at. Blank if the type is "actor-issue".
+- issue_verbatim: An issue that is being referenced in the text, as it appears in the text.
+- issue_category: An issue category that is being referenced in the text, according to a scheme provided to the annotator.
+
+## Instructions
+Critically review all claims according to the following criteria, and delete any core sentences that describe an irrelevant claim. Claims are irrelevant if any of the following conditions apply:
+
+1) The claim is not relevant to British domestic politics. In order to be relevant to domestic British politics, at least one of the following needs to be true:
+- Either the subject or the object is an organised political actor from the UK (e.g. a British politician, party, protest movement, or civil society organisation).
+- The subject is speaking about a current British policy plan, goal, or an action of a British politician.
+- The subject demands some political action from the British government.
+
+2) The claim is an actor-actor claim describing agreement between two actors in the same organisation. We record interactions between actors within the same organisations only if they are in tension. A party member supporting his own party, or another party member, does not count as an actor-actor claim.
+
+3) The claim is redundant with another claim in the same sentence. Claims are redundant in the following cases:
+- The subject and object are the same as in a past claim in the same sentence, unless they are explicitly named multiple times.
+- The subject is expressing the same stance to the same issue category as in a past claim in the same sentence.
+
+4) The claim is about a past action that is not part of current debate. Past actions should only be annotated if they are contested again.
+Positive example: "The Prime Minister criticised the previous government's broad rebate and wants to replace it with targeted subsidies" => The past government's tax rebate is being actively contested. This is part of the current debate and should be annotated.
+Negative example: "The current energy rebate was instituted by the Tories in 2021". => This is a past position that is not relevant to current debate. It is background information that should not be annotated.
+
+5) The claim is not a demand or statement in the political debate, but a piece of background information of the writer about a past situation.
+
+Delete any core sentences you deem irrelevant. 
+
+Then, take all core sentences you consider relevant, and arrange them according to the output instructions below.
+
+## Output
+Return a JSON consisting of the coded sentence and all core sentences you have deemed relevant and consistent. Use the following scheme:
+
+{final_schema}
+
+Return nothing else. Do not wrap in code blocks.
+'''
+
+## Inference
+
+GEMMACLOUD = 'gemma4:31b-cloud'
+
+modelname = GEMMACLOUD
+
+opts = {
+    "seed": 42,
+    "temperature": 0.0
+}
+
+ollama.pull(modelname)
+client = ollama.Client()
+
+# Pipeline starts here #
+
+out = []
+json_out = []
+success_ctr = 0
+error_ctr = 0
+
+for text in input:
+
+    ## Identify entities
+    entity_raw = inference(ner_prompt, text, modelname, opts, "json", client)
+
+    #print(f"Entity Output: {entity_raw}")
+    try:
+        entities = json.loads(entity_raw)
+    except (json.JSONDecodeError) as e:
+        print("No Entities passed")
+        continue
+
+    claims = []
     
-    ctr = ctr+1
-    print(f"{ctr} texts analyzed.")
+    for entity in entities:
+        input_prompt = f'''
+        {text}
 
-    out.append(response)
+        Identify all political claims according to the provided instructions. Focus only on the provided actor: {entity}.
+        '''
 
-transform_and_save(out, "reviewer_test.json")
-transform_and_save(initial, "reviewer_test_initial.json")
+        claims_raw = inference(coresents_prompt, input_prompt, modelname, opts, "json", client)
+
+        claims.append(claims_raw)
+
+    try:
+       claims = flattening(claims)
+    except json.JSONDecodeError as e:
+       claims = []
+       continue
+
+    ## Identify target variables for each claim
+
+    coresents = []
+
+    for item in claims:
+
+        # Target classification 
+
+        input_prompt = f'''{text}
+        #Classify the target of the following relation in the given sentence according to the provided instructions: {item}.
+        '''
+
+        cs = inference(target_prompt, input_prompt, modelname, opts, "json", client)
+
+        # Stance detection
+
+        input_prompt = f'''
+        Text to analyse: {text}
+
+        Previous results: {cs}
+
+        Identify the stance of the subject towards the object in the provided relation, using the instructions you were given. Do not modify any of the provided variables.
+        '''
+
+        dir_out = inference(direction_prompt, input_prompt, modelname, opts, "json", client)
+
+        # Issue references
+
+        input_prompt = f'''
+        Text to analyse: {text}
+
+        Previous results: {dir_out}
+
+        If the provided relation is an actor-actor relation, identify any potential issue references according to the instructions you were given. If the provided relation is an actor-issue relation, return the previous results unmodified.
+        '''
+
+        cs_final = inference(issueref_prompt, input_prompt, modelname, opts, cs_raw_schema, client)
+
+        #print(f"Final core sentence output: {cs_final}")
+
+        coresents.append(cs_final)
+
+    # Final review and assembly  
+
+    input_prompt = f'''
+    Text annotated: {text}
+
+    Annotations: {coresents}
+
+    Review the provided annotations, and return them according to the scheme you were provided. Do not alter any individual fields. Return nothing else.
+    '''
+
+    final_out = inference(review_prompt, input_prompt, modelname, opts, final_schema, client)
+
+    out.append(final_out)
+
+    # Validate and save on running basis
+    try:
+      parsed = json.loads(final_out)
+      validated = CSResponse(**parsed)
+      json_out.append(validated.model_dump())
+      success_ctr = success_ctr + 1
+    
+    except (json.JSONDecodeError, json.decoder.JSONDecodeError, TypeError, ValidationError) as e:
+      print(f"Error validating final output: {e}")
+      error_ctr = error_ctr + 1
+      continue
+
+    except Exception as e:
+      print(f"Error processing text: {e}")
+      error_ctr = error_ctr + 1
+      continue
+    
+    with open("entity_gemma4_ukfull_2.json", "w", encoding="utf-8") as f:
+      json.dump(json_out, f, indent=2, ensure_ascii=False)
+    
+    with open("entity_gemma4_ukfull_raw_2.txt", "w", encoding="utf-8") as f:
+      f.write(f"{out}")
+    
+    print(f"Processed {success_ctr} texts successfully, {error_ctr} errors encountered.")

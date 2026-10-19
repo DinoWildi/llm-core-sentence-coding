@@ -1,0 +1,28 @@
+GPU Monitoring started with PID 808160, logging to gpu_usage_log6698960.log
+CUDA_VISIBLE_DEVICES: 0,1
+Ollama server started with PID 808523
+[?2026h[?25l[1Gpulling manifest ⠋ [K[?25h[?2026l[?2026h[?25l[1Gpulling manifest ⠙ [K[?25h[?2026l[?2026h[?25l[1Gpulling manifest ⠹ [K[?25h[?2026l[?2026h[?25l[1Gpulling manifest ⠸ [K[?25h[?2026l[?2026h[?25l[1Gpulling manifest ⠼ [K[?25h[?2026l[?2026h[?25l[1Gpulling manifest ⠴ [K[?25h[?2026l[?2026h[?25l[1Gpulling manifest ⠦ [K[?25h[?2026l[?2026h[?25l[1Gpulling manifest ⠧ [K[?25h[?2026l[?2026h[?25l[1Gpulling manifest ⠇ [K[?25h[?2026l[?2026h[?25l[1Gpulling manifest ⠏ [K[?25h[?2026l[?2026h[?25l[1Gpulling manifest ⠋ [K[?25h[?2026l[?2026h[?25l[1Gpulling manifest ⠙ [K[?25h[?2026l[?2026h[?25l[1Gpulling manifest ⠹ [K[?25h[?2026l[?2026h[?25l[1Gpulling manifest ⠸ [K[?25h[?2026l[?2026h[?25l[1Gpulling manifest ⠼ [K[?25h[?2026l[?2026h[?25l[1Gpulling manifest ⠴ [K[?25h[?2026l[?2026h[?25l[1Gpulling manifest [K
+pulling 93c83617a405: 100% ▕██████████████████▏  81 GB                         [K
+pulling 7339fa418c9a: 100% ▕██████████████████▏  11 KB                         [K
+pulling f6417cb1e269: 100% ▕██████████████████▏   42 B                         [K
+pulling 30faf24eb503: 100% ▕██████████████████▏  483 B                         [K
+verifying sha256 digest [K
+writing manifest [K
+success [K[?25h[?2026l
+Ollama server is ready.
+[2026-08-25T11:39:08.015] error: *** JOB 6698960 ON uc3n106 CANCELLED AT 2026-08-25T11:39:08 DUE TO TIME LIMIT ***
+
+============================= JOB FEEDBACK =============================
+
+NodeName=uc3n106
+Job ID: 6698960
+Cluster: uc3
+User/Group: hd_gn354/hd_hd
+State: TIMEOUT (exit code 0)
+Nodes: 1
+Cores per node: 96
+CPU Utilized: 00:00:02
+CPU Efficiency: 0.00% of 16:27:12 core-walltime
+Job Wall-clock time: 00:10:17
+Memory Utilized: 61.76 GB
+Memory Efficiency: 16.36% of 377.54 GB (377.54 GB/node)
