@@ -1,0 +1,560 @@
+[
+  {
+    "svos": [
+      {
+        "sentence": "Europe’s biggest economy, Germany, has committed to phasing out fossil fuels by 2045, despite fierce debate about its green policies.",
+        "subject": "Europe’s biggest economy, Germany",
+        "verb": "commit",
+        "object": "phasing out fossil fuels by 2045"
+      },
+      {
+        "sentence": "Europe’s biggest economy, Germany, has committed to phasing out fossil fuels by 2045, despite fierce debate about its green policies.",
+        "subject": "OMITTED",
+        "verb": "phase out",
+        "object": "fossil fuels"
+      },
+      {
+        "sentence": "Europe’s biggest economy, Germany, has committed to phasing out fossil fuels by 2045, despite fierce debate about its green policies.",
+        "subject": "fierce debate",
+        "verb": "debate",
+        "object": "its green policies"
+      }
+    ]
+  },
+  {
+    "svos": [
+      {
+        "sentence": "In a roadmap published on Wednesday, the German government set out for the first time an explicit promise of “transitioning away” from fossil fuels.",
+        "subject": "the German government",
+        "verb": "publish",
+        "object": "a roadmap"
+      },
+      {
+        "sentence": "In a roadmap published on Wednesday, the German government set out for the first time an explicit promise of “transitioning away” from fossil fuels.",
+        "subject": "the German government",
+        "verb": "set out",
+        "object": "an explicit promise of “transitioning away” from fossil fuels"
+      },
+      {
+        "sentence": "In a roadmap published on Wednesday, the German government set out for the first time an explicit promise of “transitioning away” from fossil fuels.",
+        "subject": "an explicit promise",
+        "verb": "transition",
+        "object": "fossil fuels"
+      }
+    ]
+  },
+  {
+    "svos": [
+      {
+        "sentence": "The plans include ramping up renewable energy from 55% to 80% of electricity generation by 2030, with an additional 12GW of onshore wind, and a target of 215GW of solar energy by 2030.",
+        "subject": "The plans",
+        "verb": "include",
+        "object": "ramping up renewable energy from 55% to 80% of electricity generation by 2030"
+      },
+      {
+        "sentence": "The plans include ramping up renewable energy from 55% to 80% of electricity generation by 2030, with an additional 12GW of onshore wind, and a target of 215GW of solar energy by 2030.",
+        "subject": "The plans",
+        "verb": "include",
+        "object": "an additional 12GW of onshore wind"
+      },
+      {
+        "sentence": "The plans include ramping up renewable energy from 55% to 80% of electricity generation by 2030, with an additional 12GW of onshore wind, and a target of 215GW of solar energy by 2030.",
+        "subject": "The plans",
+        "verb": "include",
+        "object": "a target of 215GW of solar energy by 2030"
+      },
+      {
+        "sentence": "The plans include ramping up renewable energy from 55% to 80% of electricity generation by 2030, with an additional 12GW of onshore wind, and a target of 215GW of solar energy by 2030.",
+        "subject": "OMITTED",
+        "verb": "ramp up",
+        "object": "renewable energy"
+      }
+    ]
+  },
+  {
+    "svos": [
+      {
+        "sentence": "The previously stated target of winding down coal use in the next decade, with a view to an exit from coal in 2038, was also reaffirmed, with the potential for an earlier target of 2035.",
+        "subject": "OMITTED",
+        "verb": "reaffirm",
+        "object": "The previously stated target of winding down coal use in the next decade, with a view to an exit from coal in 2038"
+      }
+    ]
+  },
+  {
+    "svos": [
+      {
+        "sentence": "Emissions of methane, a greenhouse gas 80 times more powerful than carbon dioxide, will be cut by 30% by 2030, in accordance with a global methane pledge signed in 2021.",
+        "subject": "Emissions of methane, a greenhouse gas 80 times more powerful than carbon dioxide",
+        "verb": "cut",
+        "object": null
+      },
+      {
+        "sentence": "Emissions of methane, a greenhouse gas 80 times more powerful than carbon dioxide, will be cut by 30% by 2030, in accordance with a global methane pledge signed in 2021.",
+        "subject": "a global methane pledge",
+        "verb": "sign",
+        "object": null
+      }
+    ]
+  },
+  {
+    "svos": [
+      {
+        "sentence": "But he warned that Germany’s ministry for economic affairs and energy was also pushing intensely for greater use of gas",
+        "subject": "he",
+        "verb": "warn",
+        "object": "that Germany’s ministry for economic affairs and energy was also pushing intensely for greater use of gas"
+      },
+      {
+        "sentence": "But he warned that Germany’s ministry for economic affairs and energy was also pushing intensely for greater use of gas",
+        "subject": "Germany’s ministry for economic affairs and energy",
+        "verb": "push",
+        "object": "greater use of gas"
+      }
+    ]
+  },
+  {
+    "svos": [
+      {
+        "sentence": "“The economic ministry keeps sabotaging the transition away from fossil fuels,” he said.",
+        "subject": "The economic ministry",
+        "verb": "keep",
+        "object": "sabotaging the transition away from fossil fuels"
+      },
+      {
+        "sentence": "“The economic ministry keeps sabotaging the transition away from fossil fuels,” he said.",
+        "subject": "The economic ministry",
+        "verb": "sabotage",
+        "object": "the transition away from fossil fuels"
+      },
+      {
+        "sentence": "“The economic ministry keeps sabotaging the transition away from fossil fuels,” he said.",
+        "subject": "he",
+        "verb": "say",
+        "object": "“The economic ministry keeps sabotaging the transition away from fossil fuels,”"
+      }
+    ]
+  },
+  {
+    "svos": [
+      {
+        "sentence": "“This year has shown in the starkest terms that fossil-fuel dependence is a risk for everyone as it exposes households and businesses in Germany and around the world to price shocks, volatility and geopolitical insecurity.”",
+        "subject": "This year",
+        "verb": "show",
+        "object": "that fossil-fuel dependence is a risk for everyone as it exposes households and businesses in Germany and around the world to price shocks, volatility and geopolitical insecurity"
+      },
+      {
+        "sentence": "“This year has shown in the starkest terms that fossil-fuel dependence is a risk for everyone as it exposes households and businesses in Germany and around the world to price shocks, volatility and geopolitical insecurity.”",
+        "subject": "fossil-fuel dependence",
+        "verb": "be",
+        "object": "a risk for everyone"
+      },
+      {
+        "sentence": "“This year has shown in the starkest terms that fossil-fuel dependence is a risk for everyone as it exposes households and businesses in Germany and around the world to price shocks, volatility and geopolitical insecurity.”",
+        "subject": "it",
+        "verb": "expose",
+        "object": "households"
+      },
+      {
+        "sentence": "“This year has shown in the starkest terms that fossil-fuel dependence is a risk for everyone as it exposes households and businesses in Germany and around the world to price shocks, volatility and geopolitical insecurity.”",
+        "subject": "it",
+        "verb": "expose",
+        "object": "businesses in Germany and around the world"
+      }
+    ]
+  },
+  {
+    "svos": [
+      {
+        "sentence": "The UK has warned countries around the world that the climate and nature crises and the coming El Niño threaten their national security and defence, presenting foreign ministries with the findings of a report suppressed under Keir Starmer.",
+        "subject": "The UK",
+        "verb": "warn",
+        "object": "countries around the world"
+      },
+      {
+        "sentence": "The UK has warned countries around the world that the climate and nature crises and the coming El Niño threaten their national security and defence, presenting foreign ministries with the findings of a report suppressed under Keir Starmer.",
+        "subject": "the climate and nature crises",
+        "verb": "threaten",
+        "object": "their national security"
+      },
+      {
+        "sentence": "The UK has warned countries around the world that the climate and nature crises and the coming El Niño threaten their national security and defence, presenting foreign ministries with the findings of a report suppressed under Keir Starmer.",
+        "subject": "the climate and nature crises",
+        "verb": "threaten",
+        "object": "defence"
+      },
+      {
+        "sentence": "The UK has warned countries around the world that the climate and nature crises and the coming El Niño threaten their national security and defence, presenting foreign ministries with the findings of a report suppressed under Keir Starmer.",
+        "subject": "the coming El Niño",
+        "verb": "threaten",
+        "object": "their national security"
+      },
+      {
+        "sentence": "The UK has warned countries around the world that the climate and nature crises and the coming El Niño threaten their national security and defence, presenting foreign ministries with the findings of a report suppressed under Keir Starmer.",
+        "subject": "the coming El Niño",
+        "verb": "threaten",
+        "object": "defence"
+      },
+      {
+        "sentence": "The UK has warned countries around the world that the climate and nature crises and the coming El Niño threaten their national security and defence, presenting foreign ministries with the findings of a report suppressed under Keir Starmer.",
+        "subject": "The UK",
+        "verb": "present",
+        "object": "foreign ministries"
+      },
+      {
+        "sentence": "The UK has warned countries around the world that the climate and nature crises and the coming El Niño threaten their national security and defence, presenting foreign ministries with the findings of a report suppressed under Keir Starmer.",
+        "subject": "The UK",
+        "verb": "present",
+        "object": "the findings of a report suppressed under Keir Starmer"
+      },
+      {
+        "sentence": "The UK has warned countries around the world that the climate and nature crises and the coming El Niño threaten their national security and defence, presenting foreign ministries with the findings of a report suppressed under Keir Starmer.",
+        "subject": "Keir Starmer",
+        "verb": "suppress",
+        "object": "a report"
+      }
+    ]
+  },
+  {
+    "svos": [
+      {
+        "sentence": "The push for heat pumps to replace gas boilers came under attack from the far-right wing of German politics after a heating law was passed in 2023 that would have banned the installation of most oil and gas heating.",
+        "subject": "The push for heat pumps to replace gas boilers",
+        "verb": "replace",
+        "object": "gas boilers"
+      },
+      {
+        "sentence": "The push for heat pumps to replace gas boilers came under attack from the far-right wing of German politics after a heating law was passed in 2023 that would have banned the installation of most oil and gas heating.",
+        "subject": "The push for heat pumps to replace gas boilers",
+        "verb": "come",
+        "object": "under attack"
+      },
+      {
+        "sentence": "The push for heat pumps to replace gas boilers came under attack from the far-right wing of German politics after a heating law was passed in 2023 that would have banned the installation of most oil and gas heating.",
+        "subject": "the far-right wing of German politics",
+        "verb": "attack",
+        "object": "The push for heat pumps to replace gas boilers"
+      },
+      {
+        "sentence": "The push for heat pumps to replace gas boilers came under attack from the far-right wing of German politics after a heating law was passed in 2023 that would have banned the installation of most oil and gas heating.",
+        "subject": "a heating law",
+        "verb": "pass",
+        "object": null
+      },
+      {
+        "sentence": "The push for heat pumps to replace gas boilers came under attack from the far-right wing of German politics after a heating law was passed in 2023 that would have banned the installation of most oil and gas heating.",
+        "subject": "a heating law",
+        "verb": "ban",
+        "object": "the installation of most oil and gas heating"
+      }
+    ]
+  },
+  {
+    "svos": [
+      {
+        "sentence": "The Prime Minister announced subsidies for renewable energy.",
+        "subject": "The Prime Minister",
+        "verb": "announce",
+        "object": "subsidies for renewable energy"
+      }
+    ]
+  },
+  {
+    "svos": [
+      {
+        "sentence": "Just Stop Oil and Extinction Rebellion protested against the government together",
+        "subject": "Just Stop Oil",
+        "verb": "protest",
+        "object": "the government"
+      },
+      {
+        "sentence": "Just Stop Oil and Extinction Rebellion protested against the government together",
+        "subject": "Extinction Rebellion",
+        "verb": "protest",
+        "object": "the government"
+      }
+    ]
+  },
+  {
+    "svos": [
+      {
+        "sentence": "Reform UK rejects the proposed energy tax.",
+        "subject": "Reform UK",
+        "verb": "reject",
+        "object": "the proposed energy tax"
+      }
+    ]
+  },
+  {
+    "svos": [
+      {
+        "sentence": "While Labour refuses to touch industrial subsidies, the Greens demand a complete overhaul of the system.",
+        "subject": "Labour",
+        "verb": "refuse",
+        "object": "to touch industrial subsidies"
+      },
+      {
+        "sentence": "While Labour refuses to touch industrial subsidies, the Greens demand a complete overhaul of the system.",
+        "subject": "Labour",
+        "verb": "touch",
+        "object": "industrial subsidies"
+      },
+      {
+        "sentence": "While Labour refuses to touch industrial subsidies, the Greens demand a complete overhaul of the system.",
+        "subject": "the Greens",
+        "verb": "demand",
+        "object": "a complete overhaul of the system"
+      }
+    ]
+  },
+  {
+    "svos": [
+      {
+        "sentence": "Nigel Farage: \"This study is paid for by the climate lobby\"",
+        "subject": "the climate lobby",
+        "verb": "pay for",
+        "object": "This study"
+      }
+    ]
+  },
+  {
+    "svos": [
+      {
+        "sentence": "Friedrich Merz will die Rentenreform durchsetzen.",
+        "subject": "Friedrich Merz",
+        "verb": "will",
+        "object": null
+      },
+      {
+        "sentence": "Friedrich Merz will die Rentenreform durchsetzen.",
+        "subject": "Friedrich Merz",
+        "verb": "durchsetzen",
+        "object": "die Rentenreform"
+      }
+    ]
+  },
+  {
+    "svos": [
+      {
+        "sentence": "Klimaaktivisten blockierten den geplanten Kraftwerksstandort für eine Woche.",
+        "subject": "Klimaaktivisten",
+        "verb": "blockieren",
+        "object": "den geplanten Kraftwerksstandort"
+      }
+    ]
+  },
+  {
+    "svos": [
+      {
+        "sentence": "Russisches Gas müsse so schnell wie möglich wieder nach Deutschland fliessen, fordert die AfD.",
+        "subject": "Russisches Gas",
+        "verb": "fliessen",
+        "object": null
+      },
+      {
+        "sentence": "Russisches Gas müsse so schnell wie möglich wieder nach Deutschland fliessen, fordert die AfD.",
+        "subject": "die AfD",
+        "verb": "fordern",
+        "object": "Russisches Gas müsse so schnell wie möglich wieder nach Deutschland fliessen"
+      }
+    ]
+  },
+  {
+    "svos": [
+      {
+        "sentence": "Die Union einigte sich mit der SPD darauf, das Arbeitslosengeld zu kürzen",
+        "subject": "Die Union",
+        "verb": "einigen",
+        "object": "darauf, das Arbeitslosengeld zu kürzen"
+      },
+      {
+        "sentence": "Die Union einigte sich mit der SPD darauf, das Arbeitslosengeld zu kürzen",
+        "subject": "OMITTED",
+        "verb": "kürzen",
+        "object": "das Arbeitslosengeld"
+      }
+    ]
+  },
+  {
+    "svos": [
+      {
+        "sentence": "In einer Rede vor dem Bundestag letzten Freitag verkündete der Aussenminister, künftig in Fragen der Energietechnologie enger mit europäischen Partnern zusammenzuarbeiten.",
+        "subject": "der Aussenminister",
+        "verb": "verkünden",
+        "object": "künftig in Fragen der Energietechnologie enger mit europäischen Partnern zusammenzuarbeiten"
+      },
+      {
+        "sentence": "In einer Rede vor dem Bundestag letzten Freitag verkündete der Aussenminister, künftig in Fragen der Energietechnologie enger mit europäischen Partnern zusammenzuarbeiten.",
+        "subject": "der Aussenminister",
+        "verb": "zusammenarbeiten",
+        "object": "mit europäischen Partnern"
+      }
+    ]
+  },
+  {
+    "svos": [
+      {
+        "sentence": "Deutschland meldet einen Klimaschutzplan bei der UNO an, der nicht umsetzbar sein dürfte: Sabotiert Wirtschaftsministerin Reiche doch die Eneuerbaren?",
+        "subject": "Deutschland",
+        "verb": "melden",
+        "object": "einen Klimaschutzplan"
+      },
+      {
+        "sentence": "Deutschland meldet einen Klimaschutzplan bei der UNO an, der nicht umsetzbar sein dürfte: Sabotiert Wirtschaftsministerin Reiche doch die Eneuerbaren?",
+        "subject": "der",
+        "verb": "sein",
+        "object": "nicht umsetzbar"
+      },
+      {
+        "sentence": "Deutschland meldet einen Klimaschutzplan bei der UNO an, der nicht umsetzbar sein dürfte: Sabotiert Wirtschaftsministerin Reiche doch die Eneuerbaren?",
+        "subject": "Wirtschaftsministerin Reiche",
+        "verb": "sabotieren",
+        "object": "die Eneuerbaren"
+      }
+    ]
+  },
+  {
+    "svos": [
+      {
+        "sentence": "Damals einigten sich die Vertragsstaaten darauf, dass jedes Land einen Fahrplan zum Ausstieg aus den fossilen Energien vorlegt.",
+        "subject": "die Vertragsstaaten",
+        "verb": "einigen",
+        "object": "darauf, dass jedes Land einen Fahrplan zum Ausstieg aus den fossilen Energien vorlegt"
+      },
+      {
+        "sentence": "Damals einigten sich die Vertragsstaaten darauf, dass jedes Land einen Fahrplan zum Ausstieg aus den fossilen Energien vorlegt.",
+        "subject": "jedes Land",
+        "verb": "vorlegen",
+        "object": "einen Fahrplan zum Ausstieg aus den fossilen Energien"
+      }
+    ]
+  },
+  {
+    "svos": [
+      {
+        "sentence": "Diese Vergütung soll wegfallen.",
+        "subject": "Diese Vergütung",
+        "verb": "wegfallen",
+        "object": null
+      }
+    ]
+  },
+  {
+    "svos": [
+      {
+        "sentence": "Die Getränkehersteller Red Bull und Rauch wollen Pläne für ein neues Dosenwerk in Brandenburg vorantreiben.",
+        "subject": "Die Getränkehersteller Red Bull und Rauch",
+        "verb": "wollen",
+        "object": "Pläne für ein neues Dosenwerk in Brandenburg vorantreiben"
+      },
+      {
+        "sentence": "Die Getränkehersteller Red Bull und Rauch wollen Pläne für ein neues Dosenwerk in Brandenburg vorantreiben.",
+        "subject": "Die Getränkehersteller Red Bull und Rauch",
+        "verb": "vorantreiben",
+        "object": "Pläne für ein neues Dosenwerk in Brandenburg"
+      }
+    ]
+  },
+  {
+    "svos": [
+      {
+        "sentence": "Umweltschützer kündigen eine Klage an.",
+        "subject": "Umweltschützer",
+        "verb": "ankündigen",
+        "object": "eine Klage"
+      }
+    ]
+  },
+  {
+    "svos": [
+      {
+        "sentence": "Das Umwelt-Netzwerk kündigte an, beim Oberverwaltungsgericht Berlin-Brandenburg Rechtsmittel gegen den Bebauungsplan in Baruth/Mark einzulegen.",
+        "subject": "Das Umwelt-Netzwerk",
+        "verb": "ankündigen",
+        "object": "beim Oberverwaltungsgericht Berlin-Brandenburg Rechtsmittel gegen den Bebauungsplan in Baruth/Mark einzulegen"
+      },
+      {
+        "sentence": "Das Umwelt-Netzwerk kündigte an, beim Oberverwaltungsgericht Berlin-Brandenburg Rechtsmittel gegen den Bebauungsplan in Baruth/Mark einzulegen.",
+        "subject": "Das Umwelt-Netzwerk",
+        "verb": "einlegen",
+        "object": "Rechtsmittel gegen den Bebauungsplan in Baruth/Mark"
+      }
+    ]
+  },
+  {
+    "svos": [
+      {
+        "sentence": "Die Grüne Liga hatte schon einmal geklagt und damit das Projekt ausgebremst.",
+        "subject": "Die Grüne Liga",
+        "verb": "klagen",
+        "object": null
+      },
+      {
+        "sentence": "Die Grüne Liga hatte schon einmal geklagt und damit das Projekt ausgebremst.",
+        "subject": "Die Grüne Liga",
+        "verb": "ausbremsen",
+        "object": "das Projekt"
+      }
+    ]
+  },
+  {
+    "svos": [
+      {
+        "sentence": "Das Oberverwaltungsgericht stoppte im Februar den ersten Bebauungsplan für die Erweiterung des Industriestandorts in Baruth/Mark rund 50 Kilometer südlich von Berlin.",
+        "subject": "Das Oberverwaltungsgericht",
+        "verb": "stoppen",
+        "object": "den ersten Bebauungsplan für die Erweiterung des Industriestandorts in Baruth/Mark rund 50 Kilometer südlich von Berlin"
+      }
+    ]
+  },
+  {
+    "svos": [
+      {
+        "sentence": "Die Kritiker beklagen, dass die Stadt den beschlossenen Bebauungsplan noch nicht offiziell bekannt gemacht hat und fordern, dies umgehend nachzuholen.",
+        "subject": "Die Kritiker",
+        "verb": "beklagen",
+        "object": "dass die Stadt den beschlossenen Bebauungsplan noch nicht offiziell bekannt gemacht hat"
+      },
+      {
+        "sentence": "Die Kritiker beklagen, dass die Stadt den beschlossenen Bebauungsplan noch nicht offiziell bekannt gemacht hat und fordern, dies umgehend nachzuholen.",
+        "subject": "die Stadt",
+        "verb": "bekannt machen",
+        "object": "den beschlossenen Bebauungsplan"
+      },
+      {
+        "sentence": "Die Kritiker beklagen, dass die Stadt den beschlossenen Bebauungsplan noch nicht offiziell bekannt gemacht hat und fordern, dies umgehend nachzuholen.",
+        "subject": "Die Kritiker",
+        "verb": "fordern",
+        "object": "dies umgehend nachzuholen"
+      },
+      {
+        "sentence": "Die Kritiker beklagen, dass die Stadt den beschlossenen Bebauungsplan noch nicht offiziell bekannt gemacht hat und fordern, dies umgehend nachzuholen.",
+        "subject": "OMITTED",
+        "verb": "nachholen",
+        "object": "dies"
+      }
+    ]
+  },
+  {
+    "svos": [
+      {
+        "sentence": "Daher befürchten Umwelt-Initiativen, dass mit der Rodung der für die Erweiterung vorgesehenen Waldflächen begonnen werden könnte, bevor eine gerichtliche Überprüfung möglich wird.",
+        "subject": "Umwelt-Initiativen",
+        "verb": "befürchten",
+        "object": "dass mit der Rodung der für die Erweiterung vorgesehenen Waldflächen begonnen werden könnte"
+      },
+      {
+        "sentence": "Daher befürchten Umwelt-Initiativen, dass mit der Rodung der für die Erweiterung vorgesehenen Waldflächen begonnen werden könnte, bevor eine gerichtliche Überprüfung möglich wird.",
+        "subject": "OMITTED",
+        "verb": "beginnen",
+        "object": "mit der Rodung der für die Erweiterung vorgesehenen Waldflächen"
+      },
+      {
+        "sentence": "Daher befürchten Umwelt-Initiativen, dass mit der Rodung der für die Erweiterung vorgesehenen Waldflächen begonnen werden könnte, bevor eine gerichtliche Überprüfung möglich wird.",
+        "subject": "eine gerichtliche Überprüfung",
+        "verb": "werden",
+        "object": "möglich"
+      }
+    ]
+  }
+]
