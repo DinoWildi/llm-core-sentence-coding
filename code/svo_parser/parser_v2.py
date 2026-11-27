@@ -100,4 +100,68 @@ def model_check(client, modelname):
         return False
 
 # Main inference function
-#def inference(input, modelname, output_file, error_file, opts, thinking):
+def inference(input, modelname, opts, thinking, logfile):
+    '''
+    Processes sentences through LLM and returns raw outs
+    Workflow:
+        - check for model availability
+        - infer for each text
+        - return cleaned raw messages
+    '''
+
+    client = ollama.Client()
+    
+    # Model availability:
+    if not model_check(client, modelname):
+        print(f"Model {modelname} cannot be found. Attempt to pull model.")
+        client.pull(modelname)
+        print("Model pulled successfully. Beginning inference.")
+
+    # Set up counter and output list
+    ctr = 0
+    log_out = []
+    out = []
+
+    # Begin inference loop
+    for text in input:
+        messages = [
+            {"role": "system", "content": sysprompt_svo_zs},
+            {"role": "user", "content": text}
+        ]
+
+        response = client.chat(
+            model = modelname,
+            messages = messages,
+            opts = opts,
+            format = svo_schema,
+            think = thinking
+        )
+
+        # Saving results and updating counter
+        log_out.append(response)
+        cleaned = response.message.content or "{}"
+        out.append(cleaned)
+        ctr += 1
+
+    # Saving raw results and returning cleaned result
+    with open(logfile, "w", encoding = "utf-8") as f:
+        f.write(str(log_out))
+
+    print(f"Successfully processed {ctr} texts. Raw outputs saved to {logfile}")
+
+    return out
+
+def validation(outputfile, pyd_schema):
+
+    json_out = []
+
+    for text in outputfile:
+        try:
+            parsed = json.loads(text)
+            validated = pyd_schema(**parsed)
+            json_out.append(validated.model_dump())
+        except (ValidationError, json.JSONDecodeError) as e:
+            print(f"Error: {e}")
+            continue
+
+    return json_out
