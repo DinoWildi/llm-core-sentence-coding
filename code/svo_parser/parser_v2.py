@@ -11,6 +11,7 @@ from pathlib import Path
 from pydantic import BaseModel, Field, ValidationError
 from typing import List, Optional, Literal
 
+#### Define arguments for CLI use ####
 def parse_args():
     parser = argparse.ArgumentParser(
         description="Rewrite sentences in a structured SVO list."
@@ -19,6 +20,8 @@ def parse_args():
     # Main arguments: input, model, output, local/cluster
     parser.add_argument("-i", "--input", type = str, required = True,
                         help = "Path to input. Input file needs to be .csv")
+    parser.add_argument("-c", "--column", type = str, default = "sentence",
+                        help = "Which column of the input CSV contains the text to be parsed. Defaults to 'sentence'")
     parser.add_argument("-m", "--model", type = str, required = True,
                         help = "Model name following Ollama naming standards (see www.ollama.com/models)")
     parser.add_argument("-o", "--output", type = Path, default = None,
@@ -35,3 +38,66 @@ def parse_args():
                         help = "Process only the first N sentences for testing")
 
     return parser.parse_args()
+
+#### Define constants: schema, prompt ####
+
+# Response schema
+class VerbSVO(BaseModel):
+    """Represents a single Subject-Verb-Object relationship."""
+    sentence: str = Field(..., description="The full grammatical sentence you extracted the SVO from")
+    subject: str = Field(..., description="The semantic subject related to the verb")
+    verb: str = Field(..., description="The verb of the sentence or partial sentence")
+    object: Optional[str] = Field(None, description="The semantic object related to the verb, if there is one")
+
+class SentenceSVO(BaseModel):
+    """Represents all SVO relationships found in a single sentence."""
+    svos: List[VerbSVO] = Field(..., description="One entry per verb found in the sentence")
+
+# Get JSON schema to inject into prompt
+svo_schema = SentenceSVO.model_json_schema()
+
+# System prompt for SVO extraction
+sysprompt_svo_zs = f'''
+Your task is to read a sentence and extract semantic actors from them. For every verb in the sentence, extract the following four variables if possible:
+
+- "sentence": The full grammatical sentence you were passed to analyze.
+- "subject": The semantic subject associated with the action.
+- "verb": The verb that indicates the action, in its infinitive form.
+- "object": The semantic object associated with the verb, assuming there is one.
+
+Observe the following rules:
+- Subject and object should always be understood as semantic, rather than grammatical, categories. If there are indirect reports, passive sentences, etc. it is important that you parse the full sentence and identify the relevant semantic relations.
+- All variables should be answered using words already in the text. If the subject or object is referenced using a pronoun, return that pronoun.
+- If the subject is omitted from the sentence and can only be inferred from context, return "OMITTED" for the "subject" variable.
+- Return the entire description of subject and object, including articles, potential adjectives, etc.
+- If there are multiple objects phrased as a list separated by commas or connecting words like "and", create a new observation for each element of the list.
+
+Output rules:
+Return a JSON with a new entry for each verb in the sentence. For each verb you detect, return the variables according to the following JSON schema:
+{svo_schema}
+
+If there are multiple verbs or an object is separated into multiple observations as described above, make a new entry for each observation. Do not wrap in a code block. Do not return anything else.
+'''
+
+#### Define subfunctions ####
+
+## Data read-in
+def load_data(fp, column, local = False):
+    if local == False:
+        HOME = Path("/pfs/data6/home/hd/hd_hd/hd_gn354")
+
+    df = read_tabular(fp)
+    input = df['column']
+
+    return input
+
+# Checking for model presence and returning Boolean on whether <modelname> is available in the Ollama client
+def model_check(client, modelname):
+    try:
+        client.show(modelname)
+        return True
+    except ollama.ResponseError:
+        return False
+
+# Main inference function
+#def inference(input, modelname, output_file, error_file, opts, thinking):
